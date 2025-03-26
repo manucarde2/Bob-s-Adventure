@@ -1,6 +1,11 @@
+import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
-        System.out.println("Hello world!");
+        JFrame window = new JFrame("Bob Adventure");
+        window.setContentPane(new GamePanel());
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setResizable(false);
+        window.pack();
+        window.setVisible(true);
     }
 }
