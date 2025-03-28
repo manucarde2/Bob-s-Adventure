@@ -57,7 +57,7 @@ public class MenuState extends GameState
         //disegna il titolo
         g.setColor(titleColor);
         g.setFont(titleFont);
-        g.drawString("Bob Adventure", 80, 70);
+        g.drawString("Bob's Adventure", 40, 70);
 
         //disegna menu options
         g.setFont(font);
@@ -79,7 +79,7 @@ public class MenuState extends GameState
     {
         if(currentChoice == 0)
         {
-            //start
+            gsm.setState(GameStateManager.LEVEL1STATE);
         }
         if(currentChoice == 1)
         {
