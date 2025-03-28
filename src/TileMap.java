@@ -157,15 +157,13 @@ public class TileMap
             {
                 if(col >= numCols) break;
 
-                if(map[row][col] == 0) continue;
+                if(row >= numRows || col >= numCols) continue;
 
                 int rc = map[row][col];
                 int r = rc/ numTilesAcross;
-                int c = rc&numTilesAcross;
+                int c = rc%numTilesAcross;
 
-                g.drawImage(tiles[r][c].getType(),(int)x + col*tileSize,(int)y+row*tileSize,null);
-
-
+                g.drawImage(tiles[r][c].getImage(),(int)x + col*tileSize,(int)y+row*tileSize,null);
             }
         }
     }
