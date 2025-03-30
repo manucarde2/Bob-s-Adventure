@@ -11,9 +11,9 @@ public class Level1State extends GameState
     }
     public void init()
     {
-        tileMap = new TileMap(30);
-        tileMap.loadTiles("/RisorseTexture/grasstileset.gif");
-        tileMap.loadMap("/Livelli/level1-1.map");
+        tileMap = new TileMap(32);
+        tileMap.loadTiles("/RisorseTexture/Bob's Adventure Tile overworld.png");
+        tileMap.loadMap("/Livelli/Mondo prova.map");
         tileMap.setPosition(0,0);
     }
     public void update()
