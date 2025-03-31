@@ -3,6 +3,7 @@ import java.awt.*;
 public class Level1State extends GameState
 {
     private TileMap tileMap;
+    private Background bg;
 
     public Level1State(GameStateManager gsm)
     {
@@ -15,6 +16,8 @@ public class Level1State extends GameState
         tileMap.loadTiles("/RisorseTexture/Bob's Adventure Tile overworld.png");
         tileMap.loadMap("/Livelli/Mondo prova.map");
         tileMap.setPosition(0,0);
+
+        bg = new Background("/Backgrounds/Livello1Sfondo.jpg", 0.1);
     }
     public void update()
     {
@@ -22,9 +25,9 @@ public class Level1State extends GameState
     }
     public void draw(Graphics2D g)
     {
-        //pulisci schermo
-        g.setColor(Color.WHITE);
-        g.fillRect(0,0,GamePanel.WIDTH, GamePanel.HEIGHT);
+        //sfondo
+        bg.draw(g);
+
         //draw tilemap
         tileMap.draw(g);
     }
