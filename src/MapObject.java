@@ -54,7 +54,7 @@ public abstract class MapObject
     protected double fallSpeed;
     protected double maxFallSpeed;
     protected double jumpStart;
-    protected double jumpStop;
+    protected double stopJumpSpeed;
 
     //costruttore
     public MapObject(TileMap tm)
@@ -151,6 +151,10 @@ public abstract class MapObject
                 dx = 0;
                 xtemp = (currCol + 1) * tileSize - cwidth / 2;
             }
+            else
+            {
+                xtemp += dx;
+            }
         }
 
         if(!falling)
@@ -232,7 +236,7 @@ public abstract class MapObject
         jumping = b;
     }
 
-    public boolean onScreen()
+    public boolean notOnScreen()
     {
         return x + xmap + width < 0 || x + xmap - width > GamePanel.WIDTH || y + ymap + height < 0 || y + ymap - height > GamePanel.HEIGHT;
     }
