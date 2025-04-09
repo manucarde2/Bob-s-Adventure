@@ -4,6 +4,7 @@ public class Level1State extends GameState
 {
     private TileMap tileMap;
     private Background bg;
+    private Player player;
 
     public Level1State(GameStateManager gsm)
     {

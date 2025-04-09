@@ -130,7 +130,81 @@ public class Player extends MapObject
 
     private void getNextPosition()
     {
-        //bla bla bla, ble ble ble, blu blu blu
+        //movimenti
+        if(left)
+        {
+            dx -= moveSpeed;
+            if(dx < -maxSpeed)
+            {
+                dx = -maxSpeed;
+            }
+        }
+        else if(right)
+        {
+            dx += moveSpeed;
+            if(dx > maxSpeed)
+            {
+                dx = maxSpeed;
+            }
+        }
+        else
+        {
+            if(dx > 0)
+            {
+                dx -= stopSpeed;
+                if(dx < 0)
+                {
+                    dx = 0;
+                }
+            }
+            else if(dx < 0)
+            {
+                dx += stopSpeed;
+                if(dx > 0)
+                {
+                    dx = 0;
+                }
+            }
+        }
+
+        //fermarsi quando attacca
+        if((currentAction == SCRATCHING || currentAction == FIREBALL) && !(jumping || falling))
+        {
+            dx = 0;
+        }
+
+        //salto
+        if(jumping && !falling)
+        {
+            dy = jumpStart;
+            falling = true;
+        }
+
+        //caduta
+        if(falling)
+        {
+            if(dy>0 && gliding)
+            {
+                dy += fallSpeed*0.1;
+            }
+            else
+            {
+                dy += fallSpeed;
+            }
+
+            if(dy > 0)
+            {
+                jumping = false;
+            }
+            if(dy < 0 && !jumping)
+            {
+                dy += stopJumpSpeed;
+            }
+            if(dy > maxFallSpeed)
+            {
+                dy = maxFallSpeed;
+            }
+        }
     }
 
     public void update()
