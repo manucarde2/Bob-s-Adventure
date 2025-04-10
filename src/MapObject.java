@@ -88,9 +88,9 @@ public abstract class MapObject
         int br = tileMap.getType(bottomTile, rightTile);
 
         topLeft = tl == Tile.BLOCKED;
-        topRight = tl == Tile.BLOCKED;
-        bottomLeft = tl == Tile.BLOCKED;
-        bottomRight = tl == Tile.BLOCKED;
+        topRight = tr == Tile.BLOCKED;
+        bottomLeft = bl == Tile.BLOCKED;
+        bottomRight = br == Tile.BLOCKED;
     }
 
     public void checkTileMapCollision()
@@ -99,7 +99,7 @@ public abstract class MapObject
         currRow = (int)y /tileSize;
 
         xdest = x + dx;
-        xdest = y + dy;
+        ydest = y + dy;
 
         xtemp = x;
         ytemp = y;
