@@ -74,6 +74,7 @@ public class Player extends MapObject
         try
         {
             BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/RisorseTexture/Bob/BobNormale.png"));
+            sprites = new ArrayList<BufferedImage[]>();
             for(int i=0; i<7; i++)
             {
                 BufferedImage[] bi = new BufferedImage[numFrames[i]];
@@ -96,6 +97,11 @@ public class Player extends MapObject
         {
             e.printStackTrace();
         }
+
+        animation = new Animation();
+        currentAction = IDLE;
+        animation.setFrames(sprites.get(IDLE));
+        animation.setDelay(400);
     }
 
     public int getHealt()
