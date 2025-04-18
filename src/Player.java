@@ -28,18 +28,45 @@ public class Player extends MapObject
     private ArrayList<BufferedImage[]> sprites;
     private final int[] numFrames =
             {
+                    7,
+                    4,
+                    4,
+                    7,
+                    4,
+                    4,
+                    4,
+                    7,
+                    4,
+                    4,
+                    2,
+                    4,
+                    1,
+                    4,
+                    4,
+                    1,
+                    4,
+                    4,
+                    1,
+                    4,
+                    2,
+                    2,
+                    4,
+                    1,
+                    4,
+                    4,
+                    2,
+                    1,
                     1
-                    //frame per riga (quindi bho)
             };
 
     //azioni
     private static final int IDLE = 0;
-    private static final int WALKING = 1;
+    private static final int WALKING = 2;
     private static final int JUMPING = 2;
-    private static final int FALLING = 3;
-    private static final int GLIDING = 4;
-    private static final int FIREBALL = 5;
-    private static final int SCRATCHING = 6;
+    private static final int FALLING = 2;
+    private static final int GLIDING = 21;
+    private static final int FIREBALL = 11;
+    private static final int SCRATCHING = 26;
 
     public Player(TileMap tm)
     {
@@ -73,21 +100,14 @@ public class Player extends MapObject
         //Sprites
         try
         {
-            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/RisorseTexture/Bob/BobNormale.png"));
+            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/RisorseTexture/Bob/Bob Animation.png"));
             sprites = new ArrayList<BufferedImage[]>();
             for(int i=0; i<7; i++)
             {
                 BufferedImage[] bi = new BufferedImage[numFrames[i]];
                 for(int j=0; j<numFrames[i]; j++)
                 {
-                    if(i != 999) //999 è da sostituire con il numero in cui iniziano le texture più larghe, cosa che non non abbiamo
-                    {
-                        bi[j] = spritesheet.getSubimage(j*width,i*height,width,height);
-                    }
-                    else
-                    {
-                        bi[j] = spritesheet.getSubimage(j*width * 2,i*height,width,height); //2 è un esempio probabile
-                    }
+                    bi[j] = spritesheet.getSubimage(j*width,i*height,width,height);
                 }
 
                 sprites.add(bi);
@@ -227,7 +247,7 @@ public class Player extends MapObject
             {
                 currentAction = SCRATCHING;
                 animation.setFrames(sprites.get(SCRATCHING));
-                animation.setDelay(50);
+                animation.setDelay(500);
                 width = 64;
             }
         }
@@ -277,7 +297,7 @@ public class Player extends MapObject
             {
                 currentAction = WALKING;
                 animation.setFrames(sprites.get(WALKING));
-                animation.setDelay(40);
+                animation.setDelay(200);
                 width = 32;
             }
         }
@@ -287,7 +307,7 @@ public class Player extends MapObject
             {
                 currentAction = IDLE;
                 animation.setFrames(sprites.get(IDLE));
-                animation.setDelay(40);
+                animation.setDelay(1000);
                 width = 32;
             }
         }
