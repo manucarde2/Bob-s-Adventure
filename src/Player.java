@@ -16,7 +16,7 @@ public class Player extends MapObject
     private boolean firing;
     private int fireCost;
     private int fireBallDamage;
-    //private ArrayList<FireBal> fireBalls;
+    private ArrayList<FireBall> fireBalls;
 
     private boolean scratching;
     private int scratchDamage;
@@ -64,9 +64,9 @@ public class Player extends MapObject
     private static final int WALKING = 2;
     private static final int JUMPING = 2;
     private static final int FALLING = 2;
-    private static final int GLIDING = 21;
-    private static final int FIREBALL = 11;
-    private static final int SCRATCHING = 26;
+    private static final int GLIDING = 20;
+    private static final int FIREBALL = 10;
+    private static final int SCRATCHING = 25;
 
     public Player(TileMap tm)
     {
@@ -92,7 +92,7 @@ public class Player extends MapObject
 
         fireCost = 200;
         fireBallDamage = 5;
-        //fireBalls = new ArrayList<FireBalls>();
+        fireBalls = new ArrayList<FireBall>();
 
         scratchDamage = 8;
         scratchRange = 8;
@@ -102,7 +102,7 @@ public class Player extends MapObject
         {
             BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/RisorseTexture/Bob/Bob Animation.png"));
             sprites = new ArrayList<BufferedImage[]>();
-            for(int i=0; i<7; i++)
+            for(int i=0; i<29; i++)
             {
                 BufferedImage[] bi = new BufferedImage[numFrames[i]];
                 for(int j=0; j<numFrames[i]; j++)
@@ -240,6 +240,48 @@ public class Player extends MapObject
         checkTileMapCollision();
         setPosition(xtemp, ytemp);
 
+        if(currentAction == SCRATCHING)
+        {
+            if(animation.hasPlayedOnce())
+            {
+                scratching = false;
+            }
+        }
+        if(currentAction == FIREBALL)
+        {
+            if(animation.hasPlayedOnce())
+            {
+                firing = false;
+            }
+        }
+
+        //attacco palle di fuoco
+        fire += 1;
+        if(fire > maxFire)
+        {
+            fire = maxFire;
+        }
+        if(firing && currentAction != FIREBALL)
+        {
+            if(fire > fireCost)
+            {
+                fire -= fireCost;
+                FireBall fb = new FireBall(tileMap, facingRight);
+                fb.setPosition(x, y);
+                fireBalls.add(fb);
+            }
+        }
+
+        for(int i = 0; i < fireBalls.size(); i++)
+        {
+            fireBalls.get(i).update();
+            if(fireBalls.get(i).shouldRemove())
+            {
+                fireBalls.remove(i);
+                i--;
+            }
+        }
+
         //animazioni
         if(scratching)
         {
@@ -247,8 +289,8 @@ public class Player extends MapObject
             {
                 currentAction = SCRATCHING;
                 animation.setFrames(sprites.get(SCRATCHING));
-                animation.setDelay(500);
-                width = 64;
+                animation.setDelay(100);
+                width = 32;
             }
         }
         else if (firing)
@@ -326,6 +368,11 @@ public class Player extends MapObject
     {
         setMapPosition();
 
+        for(int i = 0; i < fireBalls.size(); i++)
+        {
+            fireBalls.get(i).draw(g);
+        }
+
         //disegno del player
         if(flinching)
         {
@@ -336,13 +383,6 @@ public class Player extends MapObject
             }
         }
 
-        if(facingRight)
-        {
-            g.drawImage(animation.getImage(),(int) (x + xmap - width / 2),(int) (y + ymap - height / 2),null); //disegno del personaggio in base alla mappa (sperimentale) (dubito che funziona)
-        }
-        else
-        {
-            g.drawImage(animation.getImage(),(int) (x + xmap - width / 2 + width),(int) (y + ymap - height / 2),-width,height,null);
-        }
+        super.draw(g);
     }
 }

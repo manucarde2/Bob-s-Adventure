@@ -1,11 +1,14 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class Level1State extends GameState
 {
     private TileMap tileMap;
     private Background bg;
     private Player player;
+    private ArrayList<Enemy> enemies;
+    private HUD hud;
 
     public Level1State(GameStateManager gsm)
     {
@@ -22,11 +25,26 @@ public class Level1State extends GameState
         bg = new Background("/Backgrounds/Livello1Sfondo.jpg", 0.1);
         player = new Player(tileMap);
         player.setPosition(100,100);
+
+        enemies = new ArrayList<Enemy>();
+        Loomby l;
+        l = new Loomby(tileMap);
+        l.setPosition(100,100);
+        enemies.add(l);
+
+        hud = new HUD(player);
     }
     public void update()
     {
         player.update();
         tileMap.setPosition(GamePanel.WIDTH/2 - player.getX(),GamePanel.WIDTH/2 - player.getY());
+
+        bg.setPosition(tileMap.getx(), tileMap.gety());
+
+        for(int i = 0; i < enemies.size(); i++)
+        {
+            enemies.get(i).update();
+        }
     }
     public void draw(Graphics2D g)
     {
@@ -37,6 +55,12 @@ public class Level1State extends GameState
         tileMap.draw(g);
 
         player.draw(g);
+
+        for(int i = 0; i < enemies.size(); i++)
+        {
+            enemies.get(i).draw(g);
+        }
+        hud.draw(g);
     }
     public void keyPressed(int k)
     {

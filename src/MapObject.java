@@ -137,7 +137,7 @@ public abstract class MapObject
             if(topLeft || bottomLeft)
             {
                 dx = 0;
-                xtemp = currCol * tileSize + cwidth;
+                xtemp = currCol * tileSize + cwidth / 2;
             }
             else
             {
@@ -239,5 +239,17 @@ public abstract class MapObject
     public boolean notOnScreen()
     {
         return x + xmap + width < 0 || x + xmap - width > GamePanel.WIDTH || y + ymap + height < 0 || y + ymap - height > GamePanel.HEIGHT;
+    }
+
+    public void draw(Graphics2D g)
+    {
+        if(facingRight)
+        {
+            g.drawImage(animation.getImage(),(int) (x + xmap - width / 2),(int) (y + ymap - height / 2),null); //disegno del personaggio in base alla mappa (sperimentale) (dubito che funziona)
+        }
+        else
+        {
+            g.drawImage(animation.getImage(),(int) (x + xmap - width / 2 + width),(int) (y + ymap - height / 2),-width,height,null);
+        }
     }
 }
