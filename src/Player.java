@@ -2,6 +2,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Player extends MapObject
 {
@@ -68,6 +69,8 @@ public class Player extends MapObject
     private static final int FIREBALL = 10;
     private static final int SCRATCHING = 25;
 
+    private HashMap<String, AudioPlayer> sfx;
+
     public Player(TileMap tm)
     {
         super(tm);
@@ -122,6 +125,10 @@ public class Player extends MapObject
         currentAction = IDLE;
         animation.setFrames(sprites.get(IDLE));
         animation.setDelay(400);
+
+        sfx = new HashMap<String, AudioPlayer>();
+        //sfx.put("jump", new AudioPlayer("/SoundEffects/jump.mp3"));
+        //sfx.put("scratch", new AudioPlayer("/SoundEffects/scratch.mp3"));
     }
 
     public int getHealt()
@@ -152,6 +159,71 @@ public class Player extends MapObject
     public void setGliding(boolean b)
     {
         gliding = b;
+    }
+
+    public void checkAttack(ArrayList<Enemy> enemies)
+    {
+        //loop trough enemies
+        for (int i = 0; i < enemies.size(); i++)
+        {
+            Enemy e = enemies.get(i);
+
+            //scratch attack
+            if(scratching)
+            {
+                if(facingRight)
+                {
+                    if(
+                            e.getX() > x &&
+                                    e.getX() < x + scratchRange &&
+                                    e.getY() > y - height / 2 &&
+                                    e.getY() < y + height / 2
+                    )
+                    {
+                        e.hit(scratchDamage);
+                    }
+
+                }else {
+                    if(
+                            e.getX() < x &&
+                                    e.getX() > x - scratchRange &&
+                                    e.getY() > y - height / 2 &&
+                                    e.getY() < y + height / 2
+                    )
+                    {
+                        e.hit(scratchDamage);
+                    }
+                }
+            }
+
+            //fireballs
+            for(int j = 0; j < fireBalls.size(); j++)
+            {
+                if(fireBalls.get(j).intersects(e))
+                {
+                    e.hit(fireBallDamage);
+                    fireBalls.get(j).setHit();
+                    break;
+                }
+            }
+
+            //check enemy collision
+            if(intersects(e))
+            {
+                hit(e.getDamage());
+            }
+        }
+    }
+
+    public void hit(int damage)
+    {
+        if(flinching) return;
+        healt -= damage;
+        if(healt < 0) healt = 0;
+        if(healt == 0) dead = true;
+        flinching = true;
+        flinchTimer = System.nanoTime();
+
     }
 
     private void getNextPosition()
@@ -202,6 +274,7 @@ public class Player extends MapObject
         //salto
         if(jumping && !falling)
         {
+            sfx.get("jump").play();
             dy = jumpStart;
             falling = true;
         }
@@ -272,6 +345,7 @@ public class Player extends MapObject
             }
         }
 
+        //update fireballs
         for(int i = 0; i < fireBalls.size(); i++)
         {
             fireBalls.get(i).update();
@@ -282,11 +356,22 @@ public class Player extends MapObject
             }
         }
 
+        //check done flinching
+        if(flinching)
+        {
+            long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
+            if(elapsed > 1000)
+            {
+                flinching = false;
+            }
+        }
+
         //animazioni
         if(scratching)
         {
             if(currentAction != SCRATCHING)
             {
+                sfx.get("scratch").play();
                 currentAction = SCRATCHING;
                 animation.setFrames(sprites.get(SCRATCHING));
                 animation.setDelay(100);
