@@ -22,18 +22,14 @@ public class Explosion
         this.x = x;
         this.y = y;
 
-        width = 30;
-        height = 30;
+        width = 32;
+        height = 32;
 
         try
         {
-            BufferedImage spritesheet = ImageIO.read(
-              getClass().getResourceAsStream(
-                      "/Sprites/Enemies/explosion.gif"          //qui ci va l'animazione dell'esplosione del nemico
-              )
-            );
+            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/RisorseTexture/Nemici/Esplosione Animazione.png"));          //qui ci va l'animazione dell'esplosione del nemico
 
-            sprites = new BufferedImage[6];
+            sprites = new BufferedImage[8];
             for(int i = 0; i < sprites.length; i++)
             {
                 sprites[i] = spritesheet.getSubimage(

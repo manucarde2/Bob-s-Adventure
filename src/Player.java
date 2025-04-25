@@ -127,8 +127,8 @@ public class Player extends MapObject
         animation.setDelay(400);
 
         sfx = new HashMap<String, AudioPlayer>();
-        //sfx.put("jump", new AudioPlayer("/SoundEffects/jump.mp3"));
-        //sfx.put("scratch", new AudioPlayer("/SoundEffects/scratch.mp3"));
+        sfx.put("jump", new AudioPlayer("/SoundEffects/jump.wav"));
+        sfx.put("scratch", new AudioPlayer("/SoundEffects/hitHurt.wav"));
     }
 
     public int getHealt()
