@@ -17,7 +17,7 @@ public class Loomby extends Enemy
 
         width = 32;
         height = 32;
-        cwidth = 24;
+        cwidth = 32;
         cheight = 32;
 
         health = maxHealth = 2;
