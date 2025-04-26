@@ -32,7 +32,7 @@ public class FireBall extends MapObject
 
         try
         {
-            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/RisorseTexture/Bob/PalleDiFuoco.png"));
+            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/RisorseTexture/Bob/PallaDiFuoco.png"));
 
             sprites = new BufferedImage[4];
             for (int i = 0; i<sprites.length;i++)
@@ -40,7 +40,7 @@ public class FireBall extends MapObject
                 sprites[i] = spritesheet.getSubimage(i*width,0,width,height);
             }
 
-            hitSprites = new BufferedImage[3];
+            hitSprites = new BufferedImage[4];
             for(int i = 0; i < hitSprites.length; i++)
             {
                 hitSprites[i] = spritesheet.getSubimage(i*width,height,width,height);
