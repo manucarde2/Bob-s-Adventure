@@ -153,6 +153,10 @@ public class Level1State extends GameState
         {
             player.setFiring();
         }
+        if(k == KeyEvent.VK_C)
+        {
+            player.setRunning(true);
+        }
     }
     public void keyReleased(int k)
     {
@@ -179,6 +183,10 @@ public class Level1State extends GameState
         if(k == KeyEvent.VK_E)
         {
             player.setGliding(false);
+        }
+        if(k == KeyEvent.VK_C)
+        {
+            player.setRunning(false);
         }
     }
 }

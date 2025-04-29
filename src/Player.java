@@ -8,11 +8,12 @@ public class Player extends MapObject
 {
     private int healt;
     private int maxHealt;
-    private int fire;
-    private int maxFire;
+    private int energy;
+    private int maxEnergy;
     private boolean dead;
     private boolean flinching;
     private long flinchTimer;
+    private long startRun;
 
     private boolean firing;
     private int fireCost;
@@ -23,7 +24,14 @@ public class Player extends MapObject
     private int scratchDamage;
     private int scratchRange;
 
+    private int dashRange;
+    private int dashCost;
+    private int dashDamage;
+
     private boolean gliding;
+    private boolean running;
+
+    private boolean isFast;
 
     //animazioni
     private ArrayList<BufferedImage[]> sprites;
@@ -68,6 +76,7 @@ public class Player extends MapObject
     private static final int GLIDING = 20;
     private static final int FIREBALL = 10;
     private static final int SCRATCHING = 25;
+    private static final int RUNNING = 6;
 
     private HashMap<String, AudioPlayer> sfx;
 
@@ -91,14 +100,18 @@ public class Player extends MapObject
         facingRight = true;
 
         healt = maxHealt = 5;
-        fire = maxFire = 2500;
+        energy = maxEnergy = 2500;
 
         fireCost = 200;
         fireBallDamage = 5;
         fireBalls = new ArrayList<FireBall>();
 
         scratchDamage = 8;
-        scratchRange = 8;
+        scratchRange = 48;
+
+        dashRange = 16;
+        dashCost = 5;
+        dashDamage = 5;
 
         //Sprites
         try
@@ -139,13 +152,13 @@ public class Player extends MapObject
     {
         return maxHealt;
     }
-    public int getFire()
+    public int getEnergy()
     {
-        return fire;
+        return energy;
     }
-    public int getMaxFire()
+    public int getMaxEnergy()
     {
-        return maxFire;
+        return maxEnergy;
     }
 
     public void setFiring()
@@ -159,6 +172,14 @@ public class Player extends MapObject
     public void setGliding(boolean b)
     {
         gliding = b;
+    }
+    public void setRunning(boolean b)
+    {
+        if(b && !running)
+        {
+            startRun = System.nanoTime();
+        }
+        running = b;
     }
 
     public void checkAttack(ArrayList<Enemy> enemies)
@@ -196,6 +217,33 @@ public class Player extends MapObject
                 }
             }
 
+            if(running)
+            {
+                if(facingRight)
+                {
+                    if(
+                            e.getX() > x &&
+                                    e.getX() < x + dashRange &&
+                                    e.getY() > y - height / 2 &&
+                                    e.getY() < y + height / 2
+                    )
+                    {
+                        e.hit(dashDamage);
+                    }
+
+                }else {
+                    if(
+                            e.getX() < x &&
+                                    e.getX() > x - dashRange &&
+                                    e.getY() > y - height / 2 &&
+                                    e.getY() < y + height / 2
+                    )
+                    {
+                        e.hit(dashDamage);
+                    }
+                }
+            }
+
             //fireballs
             for(int j = 0; j < fireBalls.size(); j++)
             {
@@ -206,6 +254,8 @@ public class Player extends MapObject
                     break;
                 }
             }
+
+
 
             //check enemy collision
             if(intersects(e))
@@ -304,6 +354,27 @@ public class Player extends MapObject
                 dy = maxFallSpeed;
             }
         }
+
+        if(running && !falling && ((energy-dashCost)>=0))
+        {
+            moveSpeed = 1.6;
+            maxSpeed = 6;
+            isFast = true;
+        }
+        else
+        {
+            if(isFast && falling)
+            {
+                moveSpeed = 0.3;
+                maxSpeed = 6;
+            }
+            else
+            {
+                moveSpeed = 0.3;
+                maxSpeed = 1.6;
+                isFast = false;
+            }
+        }
     }
 
     public void update()
@@ -329,19 +400,34 @@ public class Player extends MapObject
         }
 
         //attacco palle di fuoco
-        fire += 1;
-        if(fire > maxFire)
+
+        if(!running)
         {
-            fire = maxFire;
+            energy += 1;
+            if(energy > maxEnergy)
+            {
+                energy = maxEnergy;
+            }
         }
         if(firing && currentAction != FIREBALL)
         {
-            if(fire > fireCost)
+            if(energy > fireCost)
             {
-                fire -= fireCost;
+                energy -= fireCost;
                 FireBall fb = new FireBall(tileMap, facingRight);
                 fb.setPosition(x, y);
                 fireBalls.add(fb);
+            }
+        }
+        if(running)
+        {
+            if((energy-dashCost)>=0)
+            {
+                if((System.nanoTime()-startRun)>=10000000)
+                {
+                    startRun = System.nanoTime();
+                    energy -= dashCost;
+                }
             }
         }
 
@@ -415,6 +501,16 @@ public class Player extends MapObject
                 currentAction = JUMPING;
                 animation.setFrames(sprites.get(JUMPING));
                 animation.setDelay(-1);
+                width = 32;
+            }
+        }
+        else if((left || right) && running && isFast)
+        {
+            if(currentAction != RUNNING)
+            {
+                currentAction = RUNNING;
+                animation.setFrames(sprites.get(RUNNING));
+                animation.setDelay(100);
                 width = 32;
             }
         }
