@@ -6,9 +6,9 @@ public class Loomby extends Enemy
 {
     private BufferedImage[] sprites;
 
-    public Loomby(TileMap tm)
+    public Loomby(TileMap tm, int mapVoid)
     {
-        super(tm);
+        super(tm, mapVoid);
 
         moveSpeed = 0.3;
         maxSpeed = 0.3;

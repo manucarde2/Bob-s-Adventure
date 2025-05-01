@@ -29,8 +29,9 @@ public class Player extends MapObject
     private int dashDamage;
 
     private boolean gliding;
-    private boolean running;
+    private boolean flyRight;
 
+    private boolean running;
     private boolean isFast;
 
     //animazioni
@@ -77,6 +78,7 @@ public class Player extends MapObject
     private static final int FIREBALL = 10;
     private static final int SCRATCHING = 25;
     private static final int RUNNING = 6;
+    private static final int TURN = 21;
 
     private HashMap<String, AudioPlayer> sfx;
 
@@ -267,13 +269,15 @@ public class Player extends MapObject
 
     public void hit(int damage)
     {
-        if(flinching) return;
-        healt -= damage;
-        if(healt < 0) healt = 0;
-        if(healt == 0) dead = true;
-        flinching = true;
-        flinchTimer = System.nanoTime();
-
+        if(!running)
+        {
+            if(flinching) return;
+            healt -= damage;
+            if(healt < 0) healt = 0;
+            if(healt == 0) dead = true;
+            flinching = true;
+            flinchTimer = System.nanoTime();
+        }
     }
 
     private void getNextPosition()
@@ -478,10 +482,29 @@ public class Player extends MapObject
         {
             if(gliding)
             {
-                if(currentAction != GLIDING)
+                if(currentAction == TURN)
+                {
+                    if(animation.getFrame()>=1) // si riferisce all'ultimo sprite dell'animazione TURN
+                    {
+                        currentAction = GLIDING;
+                        animation.setFrames(sprites.get(GLIDING));
+                        animation.setDelay(100);
+                        width = 32;
+                        flyRight = right;
+                    }
+                }
+                else if(currentAction != GLIDING)
                 {
                     currentAction = GLIDING;
                     animation.setFrames(sprites.get(GLIDING));
+                    animation.setDelay(100);
+                    width = 32;
+                    flyRight = right;
+                }
+                if((currentAction == GLIDING) && (flyRight != facingRight) && (left || right))
+                {
+                    currentAction = TURN;
+                    animation.setFrames(sprites.get(TURN));
                     animation.setDelay(100);
                     width = 32;
                 }

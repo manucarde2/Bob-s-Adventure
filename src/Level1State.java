@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Level1State extends GameState
 {
     private TileMap tileMap;
+    private int mapVoid;
     private Background bg;
     private Player player;
     private ArrayList<Enemy> enemies;
@@ -23,6 +24,8 @@ public class Level1State extends GameState
         tileMap.loadTiles("/RisorseTexture/Bob's Adventure Tile overworld.png");
         tileMap.loadMap("/Livelli/Mondo prova.map");
         tileMap.setPosition(0,0);
+
+        mapVoid = 608;
 
         bg = new Background("/Backgrounds/Livello1Sfondo.jpg", 0.1);
         player = new Player(tileMap);
@@ -43,7 +46,8 @@ public class Level1State extends GameState
         enemies = new ArrayList<Enemy>();
 
         Loomby l;
-        Point[] points = new Point[]
+        Cannon c;
+        Point[] pointsL = new Point[]
                 {
                         new Point(200, 100),
                         new Point(860, 200),
@@ -52,11 +56,24 @@ public class Level1State extends GameState
                         new Point(1800, 200)
                 };
 
-        for(int i = 0; i < points.length; i++)
+        Point[] pointsC = new Point[]
+                {
+                        new Point(1500, 200),
+                        new Point(1700, 200),
+                };
+
+        for(int i = 0; i < pointsL.length; i++)
         {
-            l = new Loomby(tileMap);
-            l.setPosition(points[i].x, points[i].y);
+            l = new Loomby(tileMap, mapVoid);
+            l.setPosition(pointsL[i].x, pointsL[i].y);
             enemies.add(l);
+        }
+
+        for(int i = 0; i < pointsC.length; i++)
+        {
+            c = new Cannon(tileMap, mapVoid, player);
+            c.setPosition(pointsC[i].x, pointsC[i].y);
+            enemies.add(c);
         }
     }
 
