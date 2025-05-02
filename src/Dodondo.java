@@ -29,7 +29,7 @@ public class Dodondo extends Enemy
 
         width = 64;
         height = 64;
-        cwidth = 48;
+        cwidth = 32;
         cheight = 61;
 
         health = maxHealth = 20;

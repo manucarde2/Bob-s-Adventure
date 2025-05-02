@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 public class Loomby extends Enemy
 {
     private BufferedImage[] sprites;
+    private BufferedImage[] squashSprites;
+    public boolean isSquashing;
 
     public Loomby(TileMap tm)
     {
@@ -23,21 +25,7 @@ public class Loomby extends Enemy
         health = maxHealth = 2;
         damage = 1;
 
-        try
-        {
-            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/RisorseTexture/Nemici/Loomby.png"));
-
-            sprites = new BufferedImage[4];
-            for(int i = 0; i < sprites.length; i++)
-            {
-                sprites[i] = spritesheet.getSubimage(i*width,0,width,height);
-            }
-
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        loadSprite();
 
         animation = new Animation();
         animation.setFrames(sprites);
@@ -64,21 +52,7 @@ public class Loomby extends Enemy
         health = maxHealth = 2;
         damage = 1;
 
-        try
-        {
-            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/RisorseTexture/Nemici/Loomby.png"));
-
-            sprites = new BufferedImage[4];
-            for(int i = 0; i < sprites.length; i++)
-            {
-                sprites[i] = spritesheet.getSubimage(i*width,0,width,height);
-            }
-
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        loadSprite();
 
         animation = new Animation();
         animation.setFrames(sprites);
@@ -90,6 +64,11 @@ public class Loomby extends Enemy
 
     private void getNextPosition()
     {
+        if(isSquashing)
+        {
+            return;
+        }
+
         if(left)
         {
             dx -= moveSpeed;
@@ -131,6 +110,20 @@ public class Loomby extends Enemy
             dy += fallSpeed;
         }
     }
+
+    public void squash()
+    {
+        if(!isSquashing)
+        {
+            isSquashing = true;
+            animation.setFrames(squashSprites);
+            animation.setDelay(500);
+
+            dx = 0;
+            dy = 0;
+        }
+    }
+
     public void update()
     {
         getNextPosition();
@@ -145,13 +138,18 @@ public class Loomby extends Enemy
             }
         }
 
-        if(right && dx == 0)
+        if(isSquashing && animation.hasPlayedOnce())
+        {
+            hit(maxHealth);
+        }
+
+        if(right && dx == 0 && !isSquashing)
         {
             right = false;
             left = true;
             facingRight = false;
         }
-        else if(left && dx == 0)
+        else if(left && dx == 0 && !isSquashing)
         {
             right = true;
             left = false;
@@ -166,5 +164,34 @@ public class Loomby extends Enemy
         //if(notOnScreen()) return;
         setMapPosition();
         super.draw(g);
+    }
+
+    public void loadSprite()
+    {
+        try
+        {
+            try
+            {
+                BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/RisorseTexture/Nemici/Loomby.png"));
+
+                sprites = new BufferedImage[4];
+                for(int i = 0; i < sprites.length; i++)
+                {
+                    sprites[i] = spritesheet.getSubimage(i*width,0,width,height);
+                }
+
+                squashSprites = new BufferedImage[1];
+                squashSprites[0] = spritesheet.getSubimage(2*width,height,width,height);
+
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }

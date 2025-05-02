@@ -262,7 +262,17 @@ public class Player extends MapObject
             //check enemy collision
             if(intersects(e))
             {
-                hit(e.getDamage());
+                if(e instanceof Loomby && dy>0 && y != e.y)
+                {
+                    if (!((Loomby)e).isSquashing)
+                    dy = jumpStart * 1;
+                    ((Loomby)e).squash();
+                }
+                else
+                {
+                    if(!((Loomby)e).isSquashing)
+                        hit(e.getDamage());
+                }
             }
         }
     }

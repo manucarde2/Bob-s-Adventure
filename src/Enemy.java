@@ -44,4 +44,9 @@ public class Enemy extends MapObject
     {
 
     }
+
+    public void squash()
+    {
+
+    }
 }
