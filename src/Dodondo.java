@@ -3,37 +3,37 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class Cannon extends Enemy
+public class Dodondo extends Enemy
 {
     private BufferedImage[] sprites;
     private BufferedImage[] shootSprites;
+    private BufferedImage[] closeSprites;
+    private BufferedImage[] openSprites;
     private long startRun;
-    private Player player;
-    private ArrayList<Cannonball> cannonball;
-    private int cannonballDamage;
     private boolean isShooting;
+    private ArrayList<Enemy> enemies;
+    private long closeTimer;
+    private boolean isOpen;
+    private boolean isCloosing;
     private boolean isWalk;
 
-    public Cannon(TileMap tm, Player player)
+    public Dodondo(TileMap tm, ArrayList<Enemy> enemy)
     {
         super(tm);
 
-        this.player = player;
-        moveSpeed = 0.3;
-        maxSpeed = 0.3;
+        enemies = enemy;
+        moveSpeed = 0.1;
+        maxSpeed = 0.1;
         fallSpeed = 0.2;
         maxFallSpeed = 10.0;
 
-        width = 32;
-        height = 32;
-        cwidth = 32;
-        cheight = 32;
+        width = 64;
+        height = 64;
+        cwidth = 48;
+        cheight = 61;
 
-
-        health = maxHealth = 8;
+        health = maxHealth = 20;
         damage = 1;
-        cannonball = new ArrayList<Cannonball>();
-        cannonballDamage = 2;
         isShooting = false;
 
         startRun = System.nanoTime();
@@ -41,18 +41,27 @@ public class Cannon extends Enemy
 
         try
         {
-            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/RisorseTexture/Nemici/Cannone.png"));
+            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/RisorseTexture/Nemici/Dodondo.png"));
 
-            sprites = new BufferedImage[6];
+            sprites = new BufferedImage[4];
             for(int i = 0; i < sprites.length; i++)
             {
                 sprites[i] = spritesheet.getSubimage(i*width,0,width,height);
             }
 
-            shootSprites = new BufferedImage[2];
+            shootSprites = new BufferedImage[4];
             for(int i = 0; i < shootSprites.length; i++)
             {
                 shootSprites[i] = spritesheet.getSubimage(i*width,height,width,height);
+            }
+
+            openSprites = new BufferedImage[1];
+            openSprites[0]=spritesheet.getSubimage(3*width,height,width,height);
+
+            closeSprites = new BufferedImage[3];
+            for(int i = 0; i < closeSprites.length; i++)
+            {
+                closeSprites[i] = spritesheet.getSubimage(i*width,height*2,width,height);
             }
         }
         catch (Exception e)
@@ -64,8 +73,8 @@ public class Cannon extends Enemy
         animation = new Animation();
         animation.setFrames(sprites);
         animation.setDelay(100);
-        isShooting = false;
-
+        startRun = System.nanoTime();
+        isWalk = true;
 
         right = true;
         facingRight = true;
@@ -76,15 +85,24 @@ public class Cannon extends Enemy
         if(left)
         {
             dx -= moveSpeed;
-            if(dx < -maxSpeed)
+            if(isOpen)
+            {
+                dx = 0;
+            }
+            else if(dx < -maxSpeed)
             {
                 dx = -maxSpeed;
             }
+
         }
         else if(right)
         {
             dx += moveSpeed;
-            if(dx > maxSpeed)
+            if(isOpen)
+            {
+                dx = 0;
+            }
+            else if(dx > maxSpeed)
             {
                 dx = maxSpeed;
             }
@@ -128,55 +146,53 @@ public class Cannon extends Enemy
             }
         }
 
-        if(isShooting && animation.hasPlayedOnce())
+        if(isShooting && animation.getFrame()==3)
         {
+            animation.setFrames(openSprites);
+            closeTimer = System.nanoTime();
+            isOpen = true;
             isShooting = false;
         }
 
-        if(!isShooting && !isWalk)
+        if (isOpen && (((System.nanoTime()-closeTimer)/1000000)>=1000))
         {
-            animation.setFrames(sprites);
-            animation.setDelay(100);
-            isShooting = false;
+            closeAnimation();
+            isCloosing = true;
+            isOpen = false;
+        }
+
+        if(isCloosing && animation.getFrame()==2)
+        {
+            walkAnimation();
+            isCloosing = false;
+            startRun = System.nanoTime();
             isWalk = true;
         }
 
-        if(right && dx == 0)
+        if(right && dx == 0 && isWalk)
         {
             right = false;
             left = true;
             facingRight = false;
         }
-        else if(left && dx == 0)
+        else if(left && dx == 0 && isWalk)
         {
             right = true;
             left = false;
             facingRight = true;
         }
 
-        if(((System.nanoTime()-startRun)/1000000)>=3000) //1000 = 1 secondo
+        if(((System.nanoTime()-startRun)/1000000)>=3000 && isWalk) //1000 = 1 secondo
         {
-            if ((facingRight && (player.x - x) <= 350) || (!facingRight && (player.x - x) >= -350))
-            {
-                animation.setFrames(shootSprites);
-                animation.setDelay(100);
-                isShooting = true;
-                isWalk = false;
-                shootCannonBall(facingRight);
-                startRun = System.nanoTime();
-            }
-        }
+            openAnimation();
+            isShooting = true;
+            isWalk = false;
 
-        for(int i = 0; i < cannonball.size(); i++)
-        {
-            cannonball.get(i).update();
-            if(cannonball.get(i).shouldRemove())
-            {
-                cannonball.remove(i);
-                i--;
-            }
+            Loomby lb = new Loomby(tileMap, facingRight);
+            lb.setPosition(x,y);
+
+            enemies.add(lb);
         }
-        checkAttack();
 
         animation.update();
     }
@@ -186,30 +202,23 @@ public class Cannon extends Enemy
         //if(notOnScreen()) return;
         setMapPosition();
         super.draw(g);
-
-        for(int i = 0; i < cannonball.size(); i++)
-        {
-            cannonball.get(i).draw(g);
-        }
     }
 
-    public void shootCannonBall(boolean facingRight)
+    public void walkAnimation()
     {
-        Cannonball cb = new Cannonball(tileMap, facingRight);
-        cb.setPosition(x, y);
-        cannonball.add(cb);
+        animation.setFrames(sprites);
+        animation.setDelay(100);
     }
 
-    public void checkAttack()
+    public void openAnimation()
     {
-        for(int j = 0; j < cannonball.size(); j++)
-        {
-            if(cannonball.get(j).intersects(player))
-            {
-                player.hit(cannonballDamage);
-                cannonball.get(j).setHit();
-                break;
-            }
-        }
+        animation.setFrames(shootSprites);
+        animation.setDelay(100);
+    }
+
+    public void closeAnimation()
+    {
+        animation.setFrames(closeSprites);
+        animation.setDelay(100);
     }
 }

@@ -6,9 +6,9 @@ public class Loomby extends Enemy
 {
     private BufferedImage[] sprites;
 
-    public Loomby(TileMap tm, int mapVoid)
+    public Loomby(TileMap tm)
     {
-        super(tm, mapVoid);
+        super(tm);
 
         moveSpeed = 0.3;
         maxSpeed = 0.3;
@@ -17,7 +17,7 @@ public class Loomby extends Enemy
 
         width = 32;
         height = 32;
-        cwidth = 32;
+        cwidth = 20;
         cheight = 32;
 
         health = maxHealth = 2;
@@ -45,6 +45,47 @@ public class Loomby extends Enemy
 
         right = true;
         facingRight = true;
+    }
+
+    public Loomby(TileMap tm, boolean facingRight)
+    {
+        super(tm);
+
+        moveSpeed = 0.3;
+        maxSpeed = 0.3;
+        fallSpeed = 0.2;
+        maxFallSpeed = 10.0;
+
+        width = 32;
+        height = 32;
+        cwidth = 20;
+        cheight = 32;
+
+        health = maxHealth = 2;
+        damage = 1;
+
+        try
+        {
+            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/RisorseTexture/Nemici/Loomby.png"));
+
+            sprites = new BufferedImage[4];
+            for(int i = 0; i < sprites.length; i++)
+            {
+                sprites[i] = spritesheet.getSubimage(i*width,0,width,height);
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        animation = new Animation();
+        animation.setFrames(sprites);
+        animation.setDelay(300);
+
+        right = facingRight;
+        this.facingRight = facingRight;
     }
 
     private void getNextPosition()

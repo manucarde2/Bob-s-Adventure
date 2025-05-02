@@ -64,17 +64,27 @@ public class Level1State extends GameState
 
         for(int i = 0; i < pointsL.length; i++)
         {
-            l = new Loomby(tileMap, mapVoid);
+            l = new Loomby(tileMap);
             l.setPosition(pointsL[i].x, pointsL[i].y);
             enemies.add(l);
         }
 
         for(int i = 0; i < pointsC.length; i++)
         {
-            c = new Cannon(tileMap, mapVoid, player);
+            c = new Cannon(tileMap, player);
             c.setPosition(pointsC[i].x, pointsC[i].y);
             enemies.add(c);
         }
+
+        Dodondo d;
+        d = new Dodondo(tileMap,enemies);
+        d.setPosition(1500,200);
+        enemies.add(d);
+    }
+
+    public void checkCollision()
+    {
+
     }
 
     public void update()

@@ -4,15 +4,13 @@ public class Enemy extends MapObject
     protected int maxHealth;
     protected boolean dead;
     protected int damage;
-    private int mapVoid;
 
     protected boolean flinching;
     protected long flinchTimer;
 
-    public Enemy(TileMap tm, int mapVoid)
+    public Enemy(TileMap tm)
     {
         super(tm);
-        setMapVoid(mapVoid);
     }
 
     public boolean isDead()
@@ -42,13 +40,8 @@ public class Enemy extends MapObject
         flinchTimer = System.nanoTime();
     }
 
-    public void setMapVoid(int mapVoid)
-    {
-        this.mapVoid = mapVoid;
-    }
-
     public void update()
     {
-        if(y >= mapVoid) health = 0;
+
     }
 }
