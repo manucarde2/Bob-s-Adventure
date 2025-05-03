@@ -60,6 +60,7 @@ public class Loomby extends Enemy
 
         right = facingRight;
         this.facingRight = facingRight;
+        left = !right;
     }
 
     private void getNextPosition()
@@ -170,24 +171,17 @@ public class Loomby extends Enemy
     {
         try
         {
-            try
+            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/RisorseTexture/Nemici/Loomby.png"));
+
+            sprites = new BufferedImage[4];
+            for(int i = 0; i < sprites.length; i++)
             {
-                BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/RisorseTexture/Nemici/Loomby.png"));
-
-                sprites = new BufferedImage[4];
-                for(int i = 0; i < sprites.length; i++)
-                {
-                    sprites[i] = spritesheet.getSubimage(i*width,0,width,height);
-                }
-
-                squashSprites = new BufferedImage[1];
-                squashSprites[0] = spritesheet.getSubimage(2*width,height,width,height);
-
+                sprites[i] = spritesheet.getSubimage(i*width,0,width,height);
             }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+
+            squashSprites = new BufferedImage[1];
+            squashSprites[0] = spritesheet.getSubimage(2*width,height,width,height);
+
         }
         catch (Exception e)
         {

@@ -56,6 +56,8 @@ public abstract class MapObject
     protected double jumpStart;
     protected double stopJumpSpeed;
 
+    protected boolean bloccoDanno;
+
     //costruttore
     public MapObject(TileMap tm)
     {
@@ -87,11 +89,16 @@ public abstract class MapObject
         int bl = tileMap.getType(bottomTile, leftTile);
         int br = tileMap.getType(bottomTile, rightTile);
 
-        topLeft = tl == Tile.BLOCKED;
-        topRight = tr == Tile.BLOCKED;
-        bottomLeft = bl == Tile.BLOCKED;
-        bottomRight = br == Tile.BLOCKED;
+        topLeft = (tl == Tile.BLOCKED) || (tl == Tile.ITEM);
+        topRight = (tr == Tile.BLOCKED) || (tr == Tile.ITEM);
+        bottomLeft = (bl == Tile.BLOCKED) || (bl == Tile.ITEM);
+        bottomRight = (br == Tile.BLOCKED) || (br == Tile.ITEM);
+
+        if(tl == Tile.DANNO || tr == Tile.DANNO || bl == Tile.DANNO || br == Tile.DANNO)
+            bloccoDanno = true;
     }
+
+
 
     public void checkTileMapCollision()
     {

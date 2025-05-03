@@ -10,6 +10,7 @@ public class Level1State extends GameState
     private Player player;
     private ArrayList<Enemy> enemies;
     private ArrayList<Explosion> explosions;
+    private ArrayList<PowerUp> powerUps;
     private HUD hud;
     private AudioPlayer bgMusic;
 
@@ -30,6 +31,8 @@ public class Level1State extends GameState
         bg = new Background("/Backgrounds/Livello1Sfondo.jpg", 0.1);
         player = new Player(tileMap);
         player.setPosition(100,100);
+
+        powerUps = new ArrayList<PowerUp>();
 
         populateEnemies();
 
@@ -78,8 +81,17 @@ public class Level1State extends GameState
 
         Dodondo d;
         d = new Dodondo(tileMap,enemies);
-        d.setPosition(1500,200);
+        d.setPosition(1500,100);
         enemies.add(d);
+
+        PowerUp pf = new PowerUp(tileMap, PowerUp.FIRE, 100, 100);
+        PowerUp pff = new PowerUp(tileMap, PowerUp.FIGHT, 132, 100);
+        PowerUp ps = new PowerUp(tileMap, PowerUp.FLY, 164, 100);
+        PowerUp pfff = new PowerUp(tileMap, PowerUp.SPEED, 196, 100);
+        powerUps.add(pf);
+        powerUps.add(pff);
+        powerUps.add(ps);
+        powerUps.add(pfff);
     }
 
     public void checkCollision()
@@ -96,6 +108,7 @@ public class Level1State extends GameState
 
         //attack enemies
         player.checkAttack(enemies);
+        player.checkPowerUps(powerUps);
 
         //update all enemies
         for(int i = 0; i < enemies.size(); i++)
@@ -121,6 +134,19 @@ public class Level1State extends GameState
                 i--;
             }
         }
+
+        //update all PowerUps
+        for(int i = 0; i < powerUps.size(); i++)
+        {
+            PowerUp p = powerUps.get(i);
+            p.update();
+
+            if(p.isUsed)
+            {
+                powerUps.remove(i);
+                i--;
+            }
+        }
     }
     public void draw(Graphics2D g)
     {
@@ -142,6 +168,11 @@ public class Level1State extends GameState
         {
             explosions.get(i).setMapPosition((int)tileMap.getx(), (int)tileMap.gety());
             explosions.get(i).draw(g);
+        }
+
+        for(int i = 0; i < powerUps.size(); i++)
+        {
+            powerUps.get(i).draw(g);
         }
 
         hud.draw(g);

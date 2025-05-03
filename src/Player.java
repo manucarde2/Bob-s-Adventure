@@ -30,9 +30,19 @@ public class Player extends MapObject
 
     private boolean gliding;
     private boolean flyRight;
+    private boolean notGliding;
+    private boolean cantGliding;
 
     private boolean running;
     private boolean isFast;
+
+    public static final int PNORMAL = 0;
+    public static final int PFIRE = 1;
+    public static final int PFIGHT = 2;
+    public static final int PSPEED = 3;
+    public static final int PFLY = 4;
+
+    private static int PAbility = PNORMAL;
 
     //animazioni
     private ArrayList<BufferedImage[]> sprites;
@@ -70,15 +80,62 @@ public class Player extends MapObject
             };
 
     //azioni
-    private static final int IDLE = 0;
-    private static final int WALKING = 2;
-    private static final int JUMPING = 2;
-    private static final int FALLING = 2;
+    private static int IDLE = 0;
+    private static int STAND = 1;
+    private static int WALKING = 2;
+    private static int JUMPING = 2;
+    private static int FALLING = 2;
     private static final int GLIDING = 20;
     private static final int FIREBALL = 10;
     private static final int SCRATCHING = 25;
+    private static final int SCRATCHINGPLUS = 26;
+    private static final int SCRATCHINGUP = 27;
+    private static final int SCRATCHINGDOWN = 28;
     private static final int RUNNING = 6;
     private static final int TURN = 21;
+
+    private static final int normIDLE = 0;
+    private static final int normSTAND = 1;
+    private static final int normWALKING = 2;
+    private static final int normJUMPING = 2;
+    private static final int normFALLING = 2;
+
+    private static final int speedIDLE = 3;
+    private static final int speedSTAND = 4;
+    private static final int speedWALKING = 5;
+    private static final int speedJUMPING = 5;
+    private static final int speedFALLING = 5;
+
+    private static final int fireIDLE = 7;
+    private static final int fireSTAND = 8;
+    private static final int fireWALKING = 9;
+    private static final int fireJUMPING = 9;
+    private static final int fireFALLING = 9;
+
+    private static final int capeIDLE = 11;
+    private static final int capeSTAND = 12;
+    private static final int capeWALKING = 13;
+    private static final int capeJUMPING = 13;
+    private static final int capeFALLING = 13;
+
+    private static final int glassIDLE = 14;
+    private static final int glassSTAND = 15;
+    private static final int glassWALKING = 16;
+    private static final int glassJUMPING = 16;
+    private static final int glassFALLING = 16;
+
+    private static final int flyIDLE = 17;
+    private static final int flySTAND = 18;
+    private static final int flyWALKING = 19;
+    private static final int flyJUMPING = 19;
+    private static final int flyFALLING = 19;
+
+    private static final int fightIDLE = 22;
+    private static final int fightSTAND = 23;
+    private static final int fightWALKING = 24;
+    private static final int fightJUMPING = 24;
+    private static final int fightFALLING = 24;
+
 
     private HashMap<String, AudioPlayer> sfx;
 
@@ -165,23 +222,106 @@ public class Player extends MapObject
 
     public void setFiring()
     {
-        firing = true;
+        if(PAbility == PFIRE)
+            firing = true;
+        else firing = false;
     }
     public void setScratching()
     {
-        scratching = true;
+        if(PAbility == PFIGHT)
+            scratching = true;
+        else if(scratching)
+            scratching = false;
     }
     public void setGliding(boolean b)
     {
+        if(PAbility == PFLY)
         gliding = b;
+        else if (gliding)
+            gliding = false;
     }
     public void setRunning(boolean b)
     {
-        if(b && !running)
+        if(PAbility == PSPEED)
         {
-            startRun = System.nanoTime();
+            if(b && !running)
+            {
+                startRun = System.nanoTime();
+            }
+            running = b;
         }
-        running = b;
+        else if(running)
+            running = false;
+    }
+
+    public void resetAbility()
+    {
+        scratching = false;
+        firing = false;
+        running = false;
+        gliding = false;
+    }
+
+    public void changeAbility(int PowerUp)
+    {
+        switch(PowerUp)
+        {
+            case PFIRE:
+                PAbility = PFIRE;
+                IDLE = fireIDLE;
+                STAND = fireSTAND;
+                WALKING = fireWALKING;
+                JUMPING = fireJUMPING;
+                FALLING = fireFALLING;
+                break;
+            case PFIGHT:
+                PAbility = PFIGHT;
+                IDLE = fightIDLE;
+                STAND = fightSTAND;
+                WALKING = fightWALKING;
+                JUMPING = fightJUMPING;
+                FALLING = fightFALLING;
+                break;
+            case PSPEED:
+                PAbility = PSPEED;
+                IDLE = speedIDLE;
+                STAND = speedSTAND;
+                WALKING = speedWALKING;
+                JUMPING = speedJUMPING;
+                FALLING = speedFALLING;
+                break;
+            case PFLY:
+                PAbility = PFLY;
+                IDLE = glassIDLE;
+                STAND = glassSTAND;
+                WALKING = glassWALKING;
+                JUMPING = glassJUMPING;
+                FALLING = glassFALLING;
+                break;
+            default:
+                PAbility = PNORMAL;
+                IDLE = normIDLE;
+                STAND = normSTAND;
+                WALKING = normWALKING;
+                JUMPING = normJUMPING;
+                FALLING = normFALLING;
+        }
+        resetAbility();
+    }
+
+    public void checkPowerUps(ArrayList<PowerUp>powerUps)
+    {
+        //loop trough powerUps
+        for (int i = 0; i < powerUps.size(); i++)
+        {
+            PowerUp p = powerUps.get(i);
+
+            //check enemy collision
+            if(intersects(p))
+            {
+                changeAbility(p.usePowerUp());
+            }
+        }
     }
 
     public void checkAttack(ArrayList<Enemy> enemies)
@@ -270,7 +410,6 @@ public class Player extends MapObject
                 }
                 else
                 {
-                    if(!((Loomby)e).isSquashing)
                         hit(e.getDamage());
                 }
             }
@@ -391,6 +530,9 @@ public class Player extends MapObject
         }
     }
 
+
+
+
     public void update()
     {
         //aggiorna la posizione
@@ -464,6 +606,26 @@ public class Player extends MapObject
             {
                 flinching = false;
             }
+        }
+
+        //prevenzione per il cambiamento dell'animazione gliding
+        if(gliding && dy<=0 && PAbility == PFLY && !cantGliding)
+        {
+            cantGliding = true;
+            IDLE = flyIDLE;
+            STAND = flySTAND;
+            WALKING = flyWALKING;
+            JUMPING = flyJUMPING;
+            FALLING = flyFALLING;
+        }
+        else if(cantGliding && dy>0)
+        {
+            IDLE = glassIDLE;
+            STAND = glassSTAND;
+            WALKING = glassWALKING;
+            JUMPING = glassJUMPING;
+            FALLING = glassFALLING;
+            cantGliding = false;
         }
 
         //animazioni
@@ -559,10 +721,10 @@ public class Player extends MapObject
         }
         else
         {
-            if(currentAction != IDLE)
+            if(currentAction != STAND)
             {
-                currentAction = IDLE;
-                animation.setFrames(sprites.get(IDLE));
+                currentAction = STAND;
+                animation.setFrames(sprites.get(STAND));
                 animation.setDelay(1000);
                 width = 32;
             }

@@ -8,6 +8,10 @@ public class Tile
     //tile types
     public static final int NORMAL = 0;
     public static final int BLOCKED = 1;
+    public static final int ITEM = 2;
+    public static final int BREAK = 3;
+    public static final int DANNO = 3;
+
 
     public Tile(BufferedImage image, int type)
     {
