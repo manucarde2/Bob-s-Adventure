@@ -7,7 +7,7 @@ public class SettingsState extends GameState
 
     private int currentChoice = 0;
     private String[] options = {
-            "Play Again",
+            "Volume",
             "Return to menu"
     };
 
@@ -56,7 +56,7 @@ public class SettingsState extends GameState
         //disegna il titolo
         g.setColor(titleColor);
         g.setFont(titleFont);
-        g.drawString("GAME OVER", 40, 70);
+        g.drawString("IMPOSTAZIONI", 40, 70);
 
         //disegna menu options
         g.setFont(font);

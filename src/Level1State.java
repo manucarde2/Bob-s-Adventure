@@ -116,7 +116,7 @@ public class Level1State extends GameState
 
         if(player.dead)
         {
-            bgMusic.stop();
+            bgMusic.close();
             gsm.setState(GameStateManager.GAMEOVERSTATE);
         }
 
