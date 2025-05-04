@@ -10,7 +10,7 @@ public class Player extends MapObject
     private int maxHealt;
     private int energy;
     private int maxEnergy;
-    private boolean dead;
+    public boolean dead;
     private boolean flinching;
     private long flinchTimer;
     private long startRun;
@@ -412,6 +412,12 @@ public class Player extends MapObject
                 {
                         hit(e.getDamage());
                 }
+            }
+
+            //check void collision
+            if(bloccoDanno)
+            {
+                dead = true;
             }
         }
     }

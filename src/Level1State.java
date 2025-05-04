@@ -84,6 +84,10 @@ public class Level1State extends GameState
         d.setPosition(1500,100);
         enemies.add(d);
 
+        Flarby flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
+        flarby.setPosition(100, 300);
+        enemies.add(flarby);
+
         PowerUp pf = new PowerUp(tileMap, PowerUp.FIRE, 100, 100);
         PowerUp pff = new PowerUp(tileMap, PowerUp.FIGHT, 132, 100);
         PowerUp ps = new PowerUp(tileMap, PowerUp.FLY, 164, 100);
@@ -109,6 +113,12 @@ public class Level1State extends GameState
         //attack enemies
         player.checkAttack(enemies);
         player.checkPowerUps(powerUps);
+
+        if(player.dead)
+        {
+            bgMusic.stop();
+            gsm.setState(GameStateManager.GAMEOVERSTATE);
+        }
 
         //update all enemies
         for(int i = 0; i < enemies.size(); i++)
