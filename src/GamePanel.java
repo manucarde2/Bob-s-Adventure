@@ -7,7 +7,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 {
     public static final int WIDTH = 320;
     public static final int HEIGHT = 240;
-    public static final int SCALE = 2;
+    public static int SCALE = 2;
 
     private Thread thread;
     private boolean running;
@@ -26,6 +26,25 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
         setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
         setFocusable(true);
         requestFocus();
+    }
+
+
+    public void resize() {
+        int newWidth = WIDTH * SCALE;
+        int newHeight = HEIGHT * SCALE;
+        setPreferredSize(new Dimension(newWidth, newHeight));
+
+        image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+        g = (Graphics2D) image.getGraphics();
+
+        revalidate();
+        repaint();
+
+        // Ridimensiona la finestra principale
+        Window window = SwingUtilities.getWindowAncestor(this);
+        if (window != null) {
+            window.pack();
+        }
     }
 
     public void addNotify()
@@ -47,7 +66,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 
         running = true;
 
-        gsm = new GameStateManager();
+        gsm = new GameStateManager(this);
     }
 
     @Override

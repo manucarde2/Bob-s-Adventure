@@ -8,13 +8,22 @@ public class SettingsState extends GameState
     private int currentChoice = 0;
     private String[] options = {
             "Volume",
+            "Screen Scale",
             "Return to menu"
     };
+
+    private int screenScale;
 
     private Color titleColor;
     private Font titleFont;
     private Font font;
 
+    // Larghezza e altezza del GamePanel
+    private final int panelWidth = 320;
+    private final int panelHeight = 240;
+
+    // Offset verticale per abbassare le voci
+    private final int verticalOffset = 30;
 
     public SettingsState(GameStateManager gsm)
     {
@@ -33,6 +42,8 @@ public class SettingsState extends GameState
         {
             e.printStackTrace();
         }
+
+        screenScale = GameStateManager.scale;
     }
 
     @Override
@@ -50,17 +61,17 @@ public class SettingsState extends GameState
     @Override
     public void draw(Graphics2D g)
     {
-        //disegna il background
+        // Disegna il background
         bg.draw(g);
 
-        //disegna il titolo
+        // Disegna il titolo
         g.setColor(titleColor);
         g.setFont(titleFont);
-        g.drawString("IMPOSTAZIONI", 40, 70);
+        g.drawString("IMPOSTAZIONI", 40, 50);  // Posizione del titolo (resta invariata)
 
-        //disegna menu options
+        // Disegna le opzioni del menu, abbassate
         g.setFont(font);
-        for(int i=0; i<options.length; i++)
+        for(int i = 0; i < options.length; i++)
         {
             if(i == currentChoice)
             {
@@ -70,19 +81,45 @@ public class SettingsState extends GameState
             {
                 g.setColor(Color.white);
             }
-            g.drawString(options[i], 145, 140 + i * 15);
+            g.drawString(options[i], 50, 100 + i * 30 + verticalOffset); // Abbassiamo tutto con l'offset
         }
+
+        // Calcolare la posizione orizzontale centrata per le barre, ma spostata a destra
+        int barWidth = 100;  // Larghezza della barra
+        int barX = 180;  // Posizione a destra rispetto alla colonna delle opzioni
+
+        // Posizione verticale delle barre, abbassata con offset
+        int volumeY = 90 + verticalOffset;  // Posizione verticale della barra volume
+        int scaleY = 130 + verticalOffset;  // Posizione verticale della barra screen scale
+
+        // Disegna il volume con la barra
+        g.setColor(Color.white);
+        g.drawString("Volume: " + GameStateManager.volume, barX, volumeY - 10);  // Etichetta volume sopra la barra
+        g.drawRect(barX, volumeY, barWidth, 10);  // Barra volume
+        g.setColor(Color.blue);
+        g.fillRect(barX, volumeY, GameStateManager.volume, 10); // Riempie la barra in base al volume
+
+        // Disegna la scala dello schermo con il valore
+        g.setColor(Color.white);
+        g.drawString("Screen Scale: " + screenScale, barX, scaleY - 10);  // Etichetta scala sopra la barra
+        g.drawRect(barX, scaleY, barWidth, 10);  // Barra scale
+        g.setColor(Color.green);
+        g.fillRect(barX, scaleY, screenScale * 20, 10); // Riempie la barra in base alla scala
     }
 
     private void select()
     {
         if(currentChoice == 0)
         {
-            gsm.setState(GameStateManager.LEVEL1STATE);
+            // Si può regolare il volume usando la barra (sinistra/destra)
         }
         if(currentChoice == 1)
         {
-            gsm.setState(GameStateManager.MENUSTATE);
+            // Si può regolare la scala dello schermo
+        }
+        if(currentChoice == 2)
+        {
+            gsm.setState(GameStateManager.MENUSTATE);  // Torna al menu
         }
     }
 
@@ -109,6 +146,33 @@ public class SettingsState extends GameState
                 currentChoice = 0;
             }
         }
+
+        // Aggiungere la logica per modificare il volume
+        if(k == KeyEvent.VK_LEFT)
+        {
+            if(currentChoice == 0 && GameStateManager.volume > 0)  // Volume
+            {
+                GameStateManager.volume--;
+            }
+            if(currentChoice == 1 && screenScale > 1)  // Screen scale
+            {
+                screenScale--;
+            }
+        }
+
+        if(k == KeyEvent.VK_RIGHT)
+        {
+            if(currentChoice == 0 && GameStateManager.volume < 100)  // Volume
+            {
+                GameStateManager.volume++;
+            }
+            if(currentChoice == 1 && screenScale < 5)  // Screen scale
+            {
+                screenScale++;
+            }
+        }
+        if(screenScale != GameStateManager.scale)
+            gsm.resizeScale(screenScale);
     }
 
     @Override

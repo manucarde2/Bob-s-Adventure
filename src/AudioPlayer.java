@@ -1,12 +1,9 @@
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import javax.sound.sampled.*;
 
 public class AudioPlayer
 {
     private Clip clip;
-    private float volume = -10.0f;
+    private int volume = 100;
 
     public AudioPlayer(String s)
     {
@@ -56,13 +53,28 @@ public class AudioPlayer
         clip.close();
     }
 
-    public void setVolume(float value)
-    {
-        this.volume = value; // salva il valore per eventuali futuri clip
+    public void setVolume(int volumePercent) {
+        volumePercent = Math.max(0, Math.min(100, volumePercent));
+        this.volume = volumePercent;
+
         if (clip == null) return;
+
+        if (clip.isControlSupported(FloatControl.Type.VOLUME)) {
+            FloatControl volControl =
+                    (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
+            float v = volumePercent / 100f;
+            volControl.setValue(v);
+            return;
+        }
         if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(value); // Imposta il volume in decibel
+            FloatControl gainControl =
+                    (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+
+            float minDb = gainControl.getMinimum();
+            float maxDb = gainControl.getMaximum();
+            float db = (maxDb - minDb) * (volumePercent / 100f) + minDb;
+
+            gainControl.setValue(db);
         }
     }
 }

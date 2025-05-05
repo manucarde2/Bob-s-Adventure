@@ -41,6 +41,7 @@ public class Level1State extends GameState
         hud = new HUD(player);
 
         bgMusic = new AudioPlayer("/Music/soundtrack 1.wav");
+        bgMusic.setVolume(GameStateManager.volume);
         bgMusic.play();
     }
 

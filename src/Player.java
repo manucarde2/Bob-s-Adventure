@@ -153,7 +153,7 @@ public class Player extends MapObject
         stopSpeed = 0.4;
         fallSpeed = 0.15;
         maxFallSpeed = 4.0;
-        jumpStart = -4.8;
+        jumpStart = -5.8;
         stopJumpSpeed = 0.3;
 
         facingRight = true;
@@ -236,7 +236,7 @@ public class Player extends MapObject
     public void setGliding(boolean b)
     {
         if(PAbility == PFLY)
-        gliding = b;
+            gliding = b;
         else if (gliding)
             gliding = false;
     }
@@ -405,12 +405,12 @@ public class Player extends MapObject
                 if(e instanceof Loomby && dy>0 && y != e.y)
                 {
                     if (!((Loomby)e).isSquashing)
-                    dy = jumpStart * 1;
+                        dy = jumpStart * 1;
                     ((Loomby)e).squash();
                 }
                 else
                 {
-                        hit(e.getDamage());
+                    hit(e.getDamage());
                 }
             }
 

@@ -8,7 +8,7 @@ public class MenuState extends GameState
     private int currentChoice = 0;
     private String[] options = {
             "Start",
-            "Help",
+            "Settings",
             "Quit"
     };
 
@@ -83,7 +83,7 @@ public class MenuState extends GameState
         }
         if(currentChoice == 1)
         {
-            //help
+            gsm.setState(GameStateManager.SETTINGSSTATE);
         }
         if(currentChoice == 2)
         {

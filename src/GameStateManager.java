@@ -2,19 +2,27 @@ public class GameStateManager
 {
     private GameState[] gameStates;
     private int currentState;
+    public GamePanel gamePanel;
 
-    public static final int NUMGAMESTATES = 3;
+    public static final int NUMGAMESTATES = 4;
     public static final int MENUSTATE = 0;
     public static final int GAMEOVERSTATE = 1;
-    public static final int LEVEL1STATE = 2;
+    public static final int SETTINGSSTATE = 2;
+    public static final int LEVEL1STATE = 3;
 
-    public GameStateManager()
+    public static int scale;
+    public static int volume;
+
+    public GameStateManager(GamePanel gamePanel)
     {
+        this.gamePanel = gamePanel;
         gameStates = new GameState[NUMGAMESTATES];
 
         currentState = MENUSTATE;
         loadState(currentState);
 
+        scale = GamePanel.SCALE;
+        volume = 50;
     }
 
     private void loadState(int state)
@@ -22,6 +30,11 @@ public class GameStateManager
         if(state == MENUSTATE)
         {
             gameStates[state] = new MenuState(this);
+        }
+
+        if(state == SETTINGSSTATE)
+        {
+            gameStates[state] = new SettingsState(this);
         }
 
         if(state == LEVEL1STATE)
@@ -46,6 +59,13 @@ public class GameStateManager
         currentState = state;
         loadState(currentState);
         //gameStates[currentState].init();
+    }
+
+    public void resizeScale(int newScale)
+    {
+        scale = newScale;
+        GamePanel.SCALE = scale;
+        gamePanel.resize();
     }
 
     public void update()
