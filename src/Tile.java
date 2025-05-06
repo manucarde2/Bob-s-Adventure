@@ -13,8 +13,6 @@ public class Tile
     public static final int DANNO = 4;
     public static final int ENDLEVEL = 5;
 
-    public int powerUpType;
-
 
     public Tile(BufferedImage image, int type)
     {
@@ -32,28 +30,4 @@ public class Tile
         return type;
     }
 
-    public void setPowerUpType(int setPowerUp)
-    {
-        if(type == ITEM)
-        {
-            powerUpType = setPowerUp;
-            System.out.println("Power up impostato");
-        }
-    }
-
-    public int getPowerUpType()
-    {
-        if(type == ITEM)
-        {
-            type = BLOCKED;
-            System.out.println("raccolta avvenuta");
-            return powerUpType;
-        }
-        else
-        {
-            System.out.println("raccolta fallita");
-            return Player.PNORMAL;
-        }
-
-    }
 }

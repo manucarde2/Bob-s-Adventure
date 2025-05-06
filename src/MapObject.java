@@ -113,9 +113,7 @@ public abstract class MapObject
             System.out.println(topTile + " " + leftTile);
             tx = (leftTile*32) + 16;
             ty = (topTile*32) - 16;
-            int a = tileMap.getPowerUp(topTile, leftTile);
-            System.out.println("arrivato il power up n " + a);
-            savedPowerUp = a;
+            savedPowerUp = tileMap.getItem(topTile, leftTile);
         }
         else if(tr == Tile.ITEM)
         {
@@ -123,9 +121,7 @@ public abstract class MapObject
             System.out.println(topTile + " " + rightTile);
             tx = (rightTile*32) + 16;
             ty = (topTile*32) - 16;
-            int a = tileMap.getPowerUp(topTile, rightTile);
-            System.out.println("arrivato il power up n " + a);
-            savedPowerUp = a;
+            savedPowerUp = tileMap.getItem(topTile, rightTile);
         }
     }
 

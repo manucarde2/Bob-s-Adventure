@@ -44,7 +44,7 @@ public class Level1State extends GameState
         bgMusic.setVolume(GameStateManager.volume);
         bgMusic.play();
 
-        tileMap.setPowerUp(19,6,Player.PSPEED);
+        tileMap.addItem(19,6,Player.PSPEED);
     }
 
     private  void populateEnemies()
@@ -68,32 +68,28 @@ public class Level1State extends GameState
                         new Point(1700, 200),
                 };
 
-        /*for(int i = 0; i < pointsL.length; i++)
+        for(int i = 0; i < pointsL.length; i++)
         {
             l = new Loomby(tileMap);
             l.setPosition(pointsL[i].x, pointsL[i].y);
             enemies.add(l);
-        }*/
+        }
 
-        /*for(int i = 0; i < pointsC.length; i++)
+        for(int i = 0; i < pointsC.length; i++)
         {
             c = new Cannon(tileMap, player);
             c.setPosition(pointsC[i].x, pointsC[i].y);
             enemies.add(c);
-        }*/
+        }
 
-        /*Dodondo d;
+        Dodondo d;
         d = new Dodondo(tileMap,enemies);
         d.setPosition(1500,100);
-        enemies.add(d);*/
+        enemies.add(d);
 
-        /*Flarby flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
+        Flarby flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
         flarby.setPosition(100, 300);
-        enemies.add(flarby);*/
-
-        l = new Loomby(tileMap);
-        l.setPosition(200, 100);
-        enemies.add(l);
+        enemies.add(flarby);
 
         PowerUp pf = new PowerUp(tileMap, PowerUp.FIRE, 100, 100);
         PowerUp pff = new PowerUp(tileMap, PowerUp.FIGHT, 132, 100);
@@ -173,11 +169,17 @@ public class Level1State extends GameState
         if(player.havePowerUp)
         {
             player.havePowerUp = false;
-            System.out.println("PowerUp in creazione");
-            PowerUp powerUp = new PowerUp(tileMap, player.getSavedPowerUp(), player.tx, player.ty);
-            powerUps.add(powerUp);
-            System.out.println("PowerUp creato");
+            if(player.getSavedPowerUp() != Player.PNORMAL)
+            {
+                PowerUp powerUp = new PowerUp(tileMap, player.getSavedPowerUp(), player.tx, player.ty);
+                powerUps.add(powerUp);
+            }
+        }
 
+        if(player.fineLivello)
+        {
+            bgMusic.close();
+            gsm.setState(GameStateManager.MENUSTATE);
         }
     }
     public void draw(Graphics2D g)

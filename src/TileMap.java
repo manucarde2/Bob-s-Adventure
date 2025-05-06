@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class TileMap
 {
@@ -29,6 +30,7 @@ public class TileMap
     private BufferedImage tileset;
     private int numTilesAcross;
     private Tile[][] tiles;
+    private ArrayList<Item> itemBlock;
 
     //disegno
     private int rowOffset;
@@ -42,6 +44,7 @@ public class TileMap
         numRowsToDraw = GamePanel.HEIGHT/tileSize + 2;
         numColsToDraw = GamePanel.WIDTH/tileSize +2;
         tween = 0.07;
+        itemBlock = new ArrayList<Item>();
     }
 
     public void loadTiles(String s)
@@ -144,22 +147,42 @@ public class TileMap
         return tiles[r][c].getType();
     }
 
-    public int getPowerUp(int row, int col)
+    public void addItem(int row, int col, int type)
     {
         int rc = map[row][col];
         int r = rc/numTilesAcross;
         int c = rc%numTilesAcross;
-        int a = tiles[r][c].getPowerUpType();
-        System.out.println("ritorno il power up n" + a);
-        return a;
+        if(tiles[r][c].getType() == Tile.ITEM)
+        {
+            System.out.println("Item aggiunto " + type);
+            Item item = new Item();
+            item.row = row;
+            item.col = col;
+            item.type = type;
+            itemBlock.add(item);
+        }
     }
 
-    public void setPowerUp(int row, int col, int PowerUpType)
+    public int getItem(int row, int col)
     {
         int rc = map[row][col];
         int r = rc/numTilesAcross;
         int c = rc%numTilesAcross;
-        tiles[r][c].setPowerUpType(PowerUpType);
+        if(tiles[r][c].getType() == Tile.ITEM)
+        {
+            map[row][col] = 167;
+            for(int i = 0; i < itemBlock.size();i++)
+            {
+                if(itemBlock.get(i).row == row && itemBlock.get(i).col == col)
+                {
+                    int a = itemBlock.get(i).type;
+                    itemBlock.remove(i);
+                    return a;
+                }
+            }
+        }
+
+        return Player.PNORMAL;
     }
 
     public void setPosition(double x, double y)

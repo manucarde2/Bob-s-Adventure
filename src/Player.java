@@ -422,11 +422,8 @@ public class Player extends MapObject
 
     public int getSavedPowerUp()
     {
-        int tempPowerUp = savedPowerUp;
-        savedPowerUp = Player.PNORMAL;
         havePowerUp = false;
-        System.out.println("PowerUp recuperato");
-        return tempPowerUp;
+        return savedPowerUp;
     }
 
     public void hit(int damage)
