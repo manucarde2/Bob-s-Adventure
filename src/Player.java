@@ -397,8 +397,6 @@ public class Player extends MapObject
                 }
             }
 
-
-
             //check enemy collision
             if(intersects(e))
             {
@@ -422,6 +420,15 @@ public class Player extends MapObject
         }
     }
 
+    public int getSavedPowerUp()
+    {
+        int tempPowerUp = savedPowerUp;
+        savedPowerUp = Player.PNORMAL;
+        havePowerUp = false;
+        System.out.println("PowerUp recuperato");
+        return tempPowerUp;
+    }
+
     public void hit(int damage)
     {
         if(!running)
@@ -434,6 +441,8 @@ public class Player extends MapObject
             flinchTimer = System.nanoTime();
         }
     }
+
+
 
     private void getNextPosition()
     {
@@ -542,6 +551,7 @@ public class Player extends MapObject
     public void update()
     {
         //aggiorna la posizione
+
         getNextPosition();
         checkTileMapCollision();
         setPosition(xtemp, ytemp);

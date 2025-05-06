@@ -50,7 +50,7 @@ public class TileMap
         {
             tileset = ImageIO.read(getClass().getResourceAsStream(s));
             numTilesAcross = tileset.getWidth()/tileSize;
-            tiles = new Tile[2][numTilesAcross];
+            tiles = new Tile[4][numTilesAcross];
 
             BufferedImage subimage;
             for(int col = 0; col < numTilesAcross; col++)
@@ -59,7 +59,21 @@ public class TileMap
                 tiles[0][col] = new Tile(subimage, Tile.NORMAL);
                 subimage = tileset.getSubimage(col*tileSize,tileSize,tileSize,tileSize);
                 tiles[1][col] = new Tile(subimage, Tile.BLOCKED);
+
+                subimage = tileset.getSubimage(col*tileSize,tileSize*3,tileSize,tileSize);
+                tiles[3][col] = new Tile(subimage, Tile.DANNO);
             }
+            for(int col = 0; col < 4; col++)
+            {
+                subimage = tileset.getSubimage(col*tileSize,tileSize*2,tileSize,tileSize);
+                tiles[2][col] = new Tile(subimage, Tile.BREAK);
+            }
+            subimage = tileset.getSubimage(4*tileSize,tileSize*2,tileSize,tileSize);
+            tiles[2][4] = new Tile(subimage, Tile.ITEM);
+            subimage = tileset.getSubimage(5*tileSize,tileSize*2,tileSize,tileSize);
+            tiles[2][5] = new Tile(subimage, Tile.BLOCKED);
+            subimage = tileset.getSubimage(6*tileSize,tileSize*2,tileSize,tileSize);
+            tiles[2][6] = new Tile(subimage, Tile.ENDLEVEL);
         }
         catch (Exception e)
         {
@@ -130,6 +144,24 @@ public class TileMap
         return tiles[r][c].getType();
     }
 
+    public int getPowerUp(int row, int col)
+    {
+        int rc = map[row][col];
+        int r = rc/numTilesAcross;
+        int c = rc%numTilesAcross;
+        int a = tiles[r][c].getPowerUpType();
+        System.out.println("ritorno il power up n" + a);
+        return a;
+    }
+
+    public void setPowerUp(int row, int col, int PowerUpType)
+    {
+        int rc = map[row][col];
+        int r = rc/numTilesAcross;
+        int c = rc%numTilesAcross;
+        tiles[r][c].setPowerUpType(PowerUpType);
+    }
+
     public void setPosition(double x, double y)
     {
         this.x += (x-this.x)*tween;
@@ -139,7 +171,6 @@ public class TileMap
 
         colOffset = (int)-this.x / tileSize;
         rowOffset = (int)-this.y / tileSize;
-
     }
 
     private void fixBounds()

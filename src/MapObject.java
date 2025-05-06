@@ -57,6 +57,13 @@ public abstract class MapObject
     protected double stopJumpSpeed;
 
     protected boolean bloccoDanno;
+    protected boolean fineLivello;
+
+    protected Tile bloccoItem;
+    boolean havePowerUp;
+    int tx;
+    int ty;
+    int savedPowerUp;
 
     //costruttore
     public MapObject(TileMap tm)
@@ -89,16 +96,38 @@ public abstract class MapObject
         int bl = tileMap.getType(bottomTile, leftTile);
         int br = tileMap.getType(bottomTile, rightTile);
 
-        topLeft = (tl == Tile.BLOCKED) || (tl == Tile.ITEM);
-        topRight = (tr == Tile.BLOCKED) || (tr == Tile.ITEM);
-        bottomLeft = (bl == Tile.BLOCKED) || (bl == Tile.ITEM);
-        bottomRight = (br == Tile.BLOCKED) || (br == Tile.ITEM);
+        topLeft = (tl == Tile.BLOCKED) || (tl == Tile.ITEM) || (tl == Tile.BREAK);
+        topRight = (tr == Tile.BLOCKED) || (tr == Tile.ITEM) || (tr == Tile.BREAK);
+        bottomLeft = (bl == Tile.BLOCKED) || (bl == Tile.ITEM) || (bl == Tile.BREAK);
+        bottomRight = (br == Tile.BLOCKED) || (br == Tile.ITEM) || (br == Tile.BREAK);
 
         if(tl == Tile.DANNO || tr == Tile.DANNO || bl == Tile.DANNO || br == Tile.DANNO)
             bloccoDanno = true;
+
+        if(tl == Tile.ENDLEVEL || tr == Tile.ENDLEVEL || bl == Tile.ENDLEVEL || br == Tile.ENDLEVEL)
+            fineLivello = true;
+
+        if(tl == Tile.ITEM)
+        {
+            havePowerUp = true;
+            System.out.println(topTile + " " + leftTile);
+            tx = (leftTile*32) + 16;
+            ty = (topTile*32) - 16;
+            int a = tileMap.getPowerUp(topTile, leftTile);
+            System.out.println("arrivato il power up n " + a);
+            savedPowerUp = a;
+        }
+        else if(tr == Tile.ITEM)
+        {
+            havePowerUp = true;
+            System.out.println(topTile + " " + rightTile);
+            tx = (rightTile*32) + 16;
+            ty = (topTile*32) - 16;
+            int a = tileMap.getPowerUp(topTile, rightTile);
+            System.out.println("arrivato il power up n " + a);
+            savedPowerUp = a;
+        }
     }
-
-
 
     public void checkTileMapCollision()
     {
