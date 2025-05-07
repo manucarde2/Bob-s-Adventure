@@ -163,6 +163,63 @@ public class TileMap
         }
     }
 
+    public void removeBreakBlock(int row, int col)
+    {
+        int rc = map[row][col];
+        int r = rc/numTilesAcross;
+        int c = rc%numTilesAcross;
+        if(tiles[r][c].getType() == Tile.BREAK)
+        {
+            System.out.println("Blocco rotto");
+            map[row][col] = 0;
+            checkBreakBlock(row, col-1);
+            checkBreakBlock(row, col+1);
+        }
+    }
+
+    public void checkBreakBlock(int row, int col)
+    {
+        int rc = map[row][col];
+        int r = rc/numTilesAcross;
+        int c = rc%numTilesAcross;
+        if(tiles[r][c].getType() == Tile.BREAK)
+        {
+            boolean left = false;
+            boolean right = false;
+            int rc1 = map[row][col-1];
+            int r1 = rc1/numTilesAcross;
+            int c1 = rc1%numTilesAcross;
+            if(tiles[r1][c1].getType() == Tile.BREAK)
+            {
+                left = true;
+            }
+            int rc2 = map[row][col+1];
+            int r2 = rc2/numTilesAcross;
+            int c2 = rc2%numTilesAcross;
+            if(tiles[r2][c2].getType() == Tile.BREAK)
+            {
+                right = true;
+            }
+
+            if(right && left)
+            {
+                map[row][col] = 162;
+            }
+            else if(!right && !left)
+            {
+                map[row][col] = 163;
+            }
+            else if(right)
+            {
+                map[row][col] = 165;
+            }
+            else
+            {
+                map[row][col] = 164;
+            }
+        }
+    }
+
     public int getItem(int row, int col)
     {
         int rc = map[row][col];

@@ -44,7 +44,9 @@ public class Level1State extends GameState
         bgMusic.setVolume(GameStateManager.volume);
         bgMusic.play();
 
-        tileMap.addItem(19,6,Player.PSPEED);
+        tileMap.addItem(19,6,PowerUp.FIRE);
+        tileMap.addItem(12,26,PowerUp.CURE);
+        tileMap.addItem(14,45,PowerUp.FLY);
     }
 
     private  void populateEnemies()
@@ -55,17 +57,20 @@ public class Level1State extends GameState
         Cannon c;
         Point[] pointsL = new Point[]
                 {
-                        new Point(200, 100),
-                        new Point(860, 200),
-                        new Point(1525, 200),
-                        new Point(1680, 200),
-                        new Point(1800, 200)
+                        new Point(623, 592),
+                        new Point(860, 304),
+                        new Point(2038, 304),
+                        new Point(2119, 304),
+                        new Point(2166, 720),
+                        new Point(2406, 720),
+                        new Point(2193, 720),
+                        new Point(2038, 720),
                 };
 
         Point[] pointsC = new Point[]
                 {
-                        new Point(1500, 200),
-                        new Point(1700, 200),
+                        new Point(2253, 720),
+                        new Point(2110, 720),
                 };
 
         for(int i = 0; i < pointsL.length; i++)
@@ -82,23 +87,30 @@ public class Level1State extends GameState
             enemies.add(c);
         }
 
-        Dodondo d;
-        d = new Dodondo(tileMap,enemies);
-        d.setPosition(1500,100);
-        enemies.add(d);
-
         Flarby flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
-        flarby.setPosition(100, 300);
+        flarby.setPosition(847, 303);
         enemies.add(flarby);
 
-        PowerUp pf = new PowerUp(tileMap, PowerUp.FIRE, 100, 100);
-        PowerUp pff = new PowerUp(tileMap, PowerUp.FIGHT, 132, 100);
-        PowerUp ps = new PowerUp(tileMap, PowerUp.FLY, 164, 100);
-        PowerUp pfff = new PowerUp(tileMap, PowerUp.SPEED, 196, 100);
-        powerUps.add(pf);
-        powerUps.add(pff);
-        powerUps.add(ps);
-        powerUps.add(pfff);
+        flarby = new Flarby(tileMap, true, 300, 0.4, 0.6);
+        flarby.setPosition(1236, 454);
+        enemies.add(flarby);
+
+        flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
+        flarby.setPosition(2587, 182);
+        enemies.add(flarby);
+
+        flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
+        flarby.setPosition(2618, 304);
+        enemies.add(flarby);
+
+        flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
+        flarby.setPosition(2669, 432);
+        enemies.add(flarby);
+
+        flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
+        flarby.setPosition(2670, 624);
+        enemies.add(flarby);
+
     }
 
     public void checkCollision()
@@ -248,6 +260,10 @@ public class Level1State extends GameState
         if(k == KeyEvent.VK_C)
         {
             player.setRunning(true);
+        }
+        if(k == KeyEvent.VK_O)
+        {
+            System.out.println("x: " + player.getX() + " y: " + player.getY());
         }
     }
     public void keyReleased(int k)

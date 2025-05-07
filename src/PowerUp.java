@@ -14,6 +14,8 @@ public class PowerUp extends MapObject
     public static final int FIGHT = 2;
     public static final int SPEED = 3;
     public static final int FLY = 4;
+    public static final int CURE = 5;
+    public static final int STAMINA = 6;
 
     public PowerUp(TileMap tm, int type, int x, int y)
     {
@@ -87,26 +89,34 @@ public class PowerUp extends MapObject
         String texturePowerUp = "";
         int spriteNumber = 0;
 
-            switch(type) {
-                case FIRE:
-                    texturePowerUp = "/RisorseTexture/Bob/PowerUp/FirePowerUp.png";
-                    spriteNumber = 9;
-                    break;
-                case FIGHT:
-                    texturePowerUp = "/RisorseTexture/Bob/PowerUp/FightPowerUp.png";
-                    spriteNumber = 21;
-                    break;
-                case SPEED:
-                    texturePowerUp = "/RisorseTexture/Bob/PowerUp/SpeedPowerUp.png";
-                    spriteNumber = 8;
-                    break;
-                case FLY:
-                    texturePowerUp = "/RisorseTexture/Bob/PowerUp/FlyPowerUp.png";
-                    spriteNumber = 8;
-                    break;
-                default:
-                    return;
-            }
+        switch(type) {
+            case FIRE:
+                texturePowerUp = "/RisorseTexture/Bob/PowerUp/FirePowerUp.png";
+                spriteNumber = 9;
+                break;
+            case FIGHT:
+                texturePowerUp = "/RisorseTexture/Bob/PowerUp/FightPowerUp.png";
+                spriteNumber = 21;
+                break;
+            case SPEED:
+                texturePowerUp = "/RisorseTexture/Bob/PowerUp/SpeedPowerUp.png";
+                spriteNumber = 8;
+                break;
+            case FLY:
+                texturePowerUp = "/RisorseTexture/Bob/PowerUp/FlyPowerUp.png";
+                spriteNumber = 8;
+                break;
+            case CURE:
+                texturePowerUp = "/RisorseTexture/Bob/PowerUp/Cuore Animation.png";
+                spriteNumber = 8;
+                break;
+            case STAMINA:
+                texturePowerUp = "/RisorseTexture/Bob/PowerUp/Stella Animation.png";
+                spriteNumber = 8;
+                break;
+            default:
+                return;
+        }
 
         try
         {

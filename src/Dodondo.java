@@ -182,7 +182,7 @@ public class Dodondo extends Enemy
             facingRight = true;
         }
 
-        if(((System.nanoTime()-startRun)/1000000)>=3000 && isWalk) //1000 = 1 secondo
+        if(((System.nanoTime()-startRun)/1000000)>=10000 && isWalk) //1000 = 1 secondo
         {
             openAnimation();
             isShooting = true;

@@ -41,8 +41,10 @@ public class Player extends MapObject
     public static final int PFIGHT = 2;
     public static final int PSPEED = 3;
     public static final int PFLY = 4;
+    public static final int PCURE = 5;
+    public static final int PSTAMINA = 6;
 
-    private static int PAbility = PNORMAL;
+    private int PAbility = PNORMAL;
 
     //animazioni
     private ArrayList<BufferedImage[]> sprites;
@@ -172,6 +174,8 @@ public class Player extends MapObject
         dashCost = 5;
         dashDamage = 5;
 
+        changeAbility(PNORMAL);
+
         //Sprites
         try
         {
@@ -297,6 +301,18 @@ public class Player extends MapObject
                 WALKING = glassWALKING;
                 JUMPING = glassJUMPING;
                 FALLING = glassFALLING;
+                break;
+            case PCURE:
+                if(healt<maxHealt)
+                {
+                    healt++;
+                }
+                break;
+            case PSTAMINA:
+                if(energy<maxEnergy)
+                {
+                    energy = maxEnergy;
+                }
                 break;
             default:
                 PAbility = PNORMAL;
@@ -499,7 +515,7 @@ public class Player extends MapObject
         {
             if(dy>0 && gliding)
             {
-                dy += fallSpeed*0.1;
+                dy += fallSpeed*0.05;
             }
             else
             {
@@ -631,7 +647,7 @@ public class Player extends MapObject
             JUMPING = flyJUMPING;
             FALLING = flyFALLING;
         }
-        else if(cantGliding && dy>0)
+        else if(cantGliding && dy>0 && PAbility == PFLY)
         {
             IDLE = glassIDLE;
             STAND = glassSTAND;

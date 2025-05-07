@@ -107,7 +107,7 @@ public abstract class MapObject
         if(tl == Tile.ENDLEVEL || tr == Tile.ENDLEVEL || bl == Tile.ENDLEVEL || br == Tile.ENDLEVEL)
             fineLivello = true;
 
-        if(tl == Tile.ITEM)
+        if(tl == Tile.ITEM && tr == Tile.ITEM)
         {
             havePowerUp = true;
             System.out.println(topTile + " " + leftTile);
@@ -115,13 +115,10 @@ public abstract class MapObject
             ty = (topTile*32) - 16;
             savedPowerUp = tileMap.getItem(topTile, leftTile);
         }
-        else if(tr == Tile.ITEM)
+
+        if(tl == Tile.BREAK && tr == Tile.BREAK && this.getClass() == Player.class)
         {
-            havePowerUp = true;
-            System.out.println(topTile + " " + rightTile);
-            tx = (rightTile*32) + 16;
-            ty = (topTile*32) - 16;
-            savedPowerUp = tileMap.getItem(topTile, rightTile);
+            tileMap.removeBreakBlock(topTile, leftTile);
         }
     }
 
