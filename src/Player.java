@@ -446,6 +446,7 @@ public class Player extends MapObject
     {
         if(!running)
         {
+            changeAbility(PNORMAL);
             if(flinching) return;
             healt -= damage;
             if(healt < 0) healt = 0;
