@@ -22,7 +22,7 @@ public class GameOverState extends GameState
 
         try
         {
-            bg = new Background("/Backgrounds/Sfondo Game Over.jpg", 1);
+            bg = new Background("/Backgrounds/Sfondo Bob GameOver.png", 1);
             bg.setVector(-0.1, 0);
             titleColor = new Color(255, 0, 0);
             titleFont = new Font("Century Gothic", Font.PLAIN, 28);

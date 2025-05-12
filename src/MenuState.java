@@ -14,6 +14,8 @@ public class MenuState extends GameState
 
     private Color titleColor;
     private Font titleFont;
+    private Color nomeColor;
+    private Font nomeFont;
     private Font font;
 
 
@@ -23,10 +25,12 @@ public class MenuState extends GameState
 
         try
         {
-            bg = new Background("/Backgrounds/menubg.gif", 1);
+            bg = new Background("/Backgrounds/Sfondo Bob Menu.png", 1);
             bg.setVector(-0.1, 0);
             titleColor = new Color(128, 0, 0);
             titleFont = new Font("Century Gothic", Font.PLAIN, 28);
+            nomeFont = new Font("Century Gothic", Font.PLAIN, 10);
+            nomeColor = Color.BLACK;
 
             font = new Font("Arial", Font.PLAIN, 12);
         }
@@ -58,6 +62,9 @@ public class MenuState extends GameState
         g.setColor(titleColor);
         g.setFont(titleFont);
         g.drawString("Bob's Adventure", 40, 70);
+        g.setColor(nomeColor);
+        g.setFont(nomeFont);
+        g.drawString("©Made by Emanuele Cardellini e Andrea Ferragina", 40, 230);
 
         //disegna menu options
         g.setFont(font);

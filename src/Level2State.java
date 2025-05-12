@@ -28,7 +28,7 @@ public class Level2State extends GameState
 
         mapVoid = 608;
 
-        bg = new Background("/Backgrounds/Livello1Sfondo.jpg", 0.1);
+        bg = new Background("/Backgrounds/Sfondo Bob Deserto.png", 0.1);
         player = new Player(tileMap);
         player.setPosition(80,560);
 
@@ -44,9 +44,9 @@ public class Level2State extends GameState
         bgMusic.setVolume(GameStateManager.volume);
         bgMusic.play();
 
-        tileMap.addItem(13,10,PowerUp.FIRE);
+        tileMap.addItem(13,10,PowerUp.SPEED);
         tileMap.addItem(17,61,PowerUp.FIGHT);
-        tileMap.addItem(9,73,PowerUp.CURE);
+        tileMap.addItem(9,73,PowerUp.STAMINA);
         tileMap.addItem(5,24,PowerUp.FIRE);
     }
 
@@ -135,7 +135,8 @@ public class Level2State extends GameState
 
     public void update()
     {
-        player.update();
+        if(!player.fineLivello)
+            player.update();
         tileMap.setPosition(GamePanel.WIDTH/2 - player.getX(),GamePanel.WIDTH/2 - player.getY());
 
         bg.setPosition(tileMap.getx(), tileMap.gety());
@@ -206,7 +207,9 @@ public class Level2State extends GameState
         if(player.fineLivello)
         {
             bgMusic.close();
-            gsm.setState(GameStateManager.MENUSTATE);
+            player.animation.update();
+            if(player.winAnimation())
+                gsm.setState(GameStateManager.LEVEL3STATE);
         }
     }
     public void draw(Graphics2D g)

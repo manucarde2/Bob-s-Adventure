@@ -67,7 +67,7 @@ public class SettingsState extends GameState
         // Disegna il titolo
         g.setColor(titleColor);
         g.setFont(titleFont);
-        g.drawString("IMPOSTAZIONI", 40, 50);  // Posizione del titolo (resta invariata)
+        g.drawString("SETTINGS", 40, 50);  // Posizione del titolo (resta invariata)
 
         // Disegna le opzioni del menu, abbassate
         g.setFont(font);

@@ -2,7 +2,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-public class Level1State extends GameState
+public class Level3State extends GameState
 {
     private TileMap tileMap;
     private int mapVoid;
@@ -14,7 +14,7 @@ public class Level1State extends GameState
     private HUD hud;
     private AudioPlayer bgMusic;
 
-    public Level1State(GameStateManager gsm)
+    public Level3State(GameStateManager gsm)
     {
         this.gsm = gsm;
         init();
@@ -23,14 +23,14 @@ public class Level1State extends GameState
     {
         tileMap = new TileMap(32);
         tileMap.loadTiles("/RisorseTexture/Bob's Adventure TileMap.png");
-        tileMap.loadMap("/Livelli/Livello 1.map");
+        tileMap.loadMap("/Livelli/Livello 3.map");
         tileMap.setPosition(0,0);
 
         mapVoid = 608;
 
-        bg = new Background("/Backgrounds/Sfondo Bob Normale.png", 0.1);
+        bg = new Background("/Backgrounds/Sfondo Bob Caverna.png", 0.1);
         player = new Player(tileMap);
-        player.setPosition(100,100);
+        player.setPosition(80,100);
 
         powerUps = new ArrayList<PowerUp>();
 
@@ -40,13 +40,17 @@ public class Level1State extends GameState
 
         hud = new HUD(player);
 
-        bgMusic = new AudioPlayer("/Music/soundtrack 1.wav");
+        bgMusic = new AudioPlayer("/Music/soundtrack 3.wav");
         bgMusic.setVolume(GameStateManager.volume);
         bgMusic.play();
 
-        tileMap.addItem(19,6,PowerUp.FIRE);
-        tileMap.addItem(12,26,PowerUp.CURE);
-        tileMap.addItem(14,45,PowerUp.FLY);
+        tileMap.addItem(3,8,PowerUp.SPEED);
+        tileMap.addItem(6,28,PowerUp.CURE);
+        tileMap.addItem(6,72,PowerUp.STAMINA);
+        tileMap.addItem(14,55,PowerUp.FIGHT);
+        tileMap.addItem(14,29,PowerUp.SPEED);
+        tileMap.addItem(21,8,PowerUp.SPEED);
+        tileMap.addItem(21,10,PowerUp.STAMINA);
     }
 
     private  void populateEnemies()
@@ -57,20 +61,27 @@ public class Level1State extends GameState
         Cannon c;
         Point[] pointsL = new Point[]
                 {
-                        new Point(623, 592),
-                        new Point(860, 304),
-                        new Point(2038, 304),
-                        new Point(2119, 304),
-                        new Point(2166, 720),
-                        new Point(2406, 720),
-                        new Point(2193, 720),
-                        new Point(2038, 720),
+                        new Point(842, 272),
+                        new Point(952 , 272),
+                        new Point(1382, 176),
+                        new Point(1472, 176),
+                        new Point(1591, 176),
+                        new Point(1749, 176),
+                        new Point(1484, 528),
+                        new Point(1390, 528),
+                        new Point(1288, 528),
+                        new Point(1200, 528),
+                        new Point(878, 528),
+                        new Point(750, 528),
+                        new Point(655, 528),
+                        new Point(522, 528),
+                        new Point(598, 528),
                 };
 
         Point[] pointsC = new Point[]
                 {
-                        new Point(2253, 720),
-                        new Point(2110, 720),
+                        new Point(1010, 528),
+                        new Point(1684, 176),
                 };
 
         for(int i = 0; i < pointsL.length; i++)
@@ -87,29 +98,37 @@ public class Level1State extends GameState
             enemies.add(c);
         }
 
-        Flarby flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
-        flarby.setPosition(847, 303);
+        Dodondo dodondo = new Dodondo(tileMap, enemies);
+        dodondo.setPosition(2272,368);
+        enemies.add(dodondo);
+
+        /*Flarby flarby = new Flarby(tileMap, true, 128, 0.4, 0.6);
+        flarby.setPosition(749, 350);
         enemies.add(flarby);
 
-        flarby = new Flarby(tileMap, true, 300, 0.4, 0.6);
-        flarby.setPosition(1236, 454);
+        flarby = new Flarby(tileMap, true, 128, 0.4, 0.6);
+        flarby.setPosition(1008, 350);
         enemies.add(flarby);
 
-        flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
-        flarby.setPosition(2587, 182);
-        enemies.add(flarby);
-
-        flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
-        flarby.setPosition(2618, 304);
-        enemies.add(flarby);
-
-        flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
-        flarby.setPosition(2669, 432);
+        flarby = new Flarby(tileMap, true, 128, 0.4, 0.6);
+        flarby.setPosition(1268, 350);
         enemies.add(flarby);
 
         flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
-        flarby.setPosition(2670, 624);
+        flarby.setPosition(1909, 324);
         enemies.add(flarby);
+
+        flarby = new Flarby(tileMap, false, 128, 0.4, 0.6);
+        flarby.setPosition(1998, 140);
+        enemies.add(flarby);
+
+        flarby = new Flarby(tileMap, false, 128, 0.4, 0.6);
+        flarby.setPosition(1837, 140);
+        enemies.add(flarby);
+
+        flarby = new Flarby(tileMap, false, 128, 0.4, 0.6);
+        flarby.setPosition(1837, 140);
+        enemies.add(flarby);*/
 
     }
 
@@ -122,7 +141,6 @@ public class Level1State extends GameState
     {
         if(!player.fineLivello)
             player.update();
-
         tileMap.setPosition(GamePanel.WIDTH/2 - player.getX(),GamePanel.WIDTH/2 - player.getY());
 
         bg.setPosition(tileMap.getx(), tileMap.gety());
@@ -195,7 +213,7 @@ public class Level1State extends GameState
             bgMusic.close();
             player.animation.update();
             if(player.winAnimation())
-                gsm.setState(GameStateManager.LEVEL2STATE);
+                gsm.setState(GameStateManager.MENUSTATE);
         }
     }
     public void draw(Graphics2D g)

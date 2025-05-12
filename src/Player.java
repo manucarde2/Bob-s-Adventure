@@ -50,7 +50,7 @@ public class Player extends MapObject
     private ArrayList<BufferedImage[]> sprites;
     private final int[] numFrames =
             {
-                    7,
+                    1,
                     4,
                     4,
                     7,
@@ -163,7 +163,7 @@ public class Player extends MapObject
         healt = maxHealt = 5;
         energy = maxEnergy = 2500;
 
-        fireCost = 200;
+        fireCost = 500;
         fireBallDamage = 5;
         fireBalls = new ArrayList<FireBall>();
 
@@ -171,7 +171,7 @@ public class Player extends MapObject
         scratchRange = 48;
 
         dashRange = 16;
-        dashCost = 5;
+        dashCost = 10;
         dashDamage = 5;
 
         changeAbility(PNORMAL);
@@ -790,5 +790,17 @@ public class Player extends MapObject
         }
 
         super.draw(g);
+    }
+
+    public boolean winAnimation()
+    {
+        if (currentAction != IDLE)
+        {
+            currentAction = IDLE;
+            animation.setFrames(sprites.get(IDLE));
+            animation.setDelay(400);
+            return false;
+        }
+        else return animation.hasPlayedOnce();
     }
 }
