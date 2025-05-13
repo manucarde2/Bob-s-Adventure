@@ -28,9 +28,9 @@ public class Level3State extends GameState
 
         mapVoid = 608;
 
-        bg = new Background("/Backgrounds/Sfondo Bob Caverna.png", 0.1);
+        bg = new Background("/Backgrounds/Sfondo Bob Deserto.png", 0.1);
         player = new Player(tileMap);
-        player.setPosition(80,100);
+        player.setPosition(80,560);
 
         powerUps = new ArrayList<PowerUp>();
 
@@ -40,17 +40,14 @@ public class Level3State extends GameState
 
         hud = new HUD(player);
 
-        bgMusic = new AudioPlayer("/Music/soundtrack 3.wav");
+        bgMusic = new AudioPlayer("/Music/soundtrack 2.wav");
         bgMusic.setVolume(GameStateManager.volume);
         bgMusic.play();
 
-        tileMap.addItem(3,8,PowerUp.SPEED);
-        tileMap.addItem(6,28,PowerUp.CURE);
-        tileMap.addItem(6,72,PowerUp.STAMINA);
-        tileMap.addItem(14,55,PowerUp.FIGHT);
-        tileMap.addItem(14,29,PowerUp.SPEED);
-        tileMap.addItem(21,8,PowerUp.SPEED);
-        tileMap.addItem(21,10,PowerUp.STAMINA);
+        tileMap.addItem(13,10,PowerUp.SPEED);
+        tileMap.addItem(17,61,PowerUp.FIGHT);
+        tileMap.addItem(9,73,PowerUp.STAMINA);
+        tileMap.addItem(5,24,PowerUp.FIRE);
     }
 
     private  void populateEnemies()
@@ -61,27 +58,26 @@ public class Level3State extends GameState
         Cannon c;
         Point[] pointsL = new Point[]
                 {
-                        new Point(842, 272),
-                        new Point(952 , 272),
-                        new Point(1382, 176),
-                        new Point(1472, 176),
-                        new Point(1591, 176),
-                        new Point(1749, 176),
-                        new Point(1484, 528),
-                        new Point(1390, 528),
-                        new Point(1288, 528),
-                        new Point(1200, 528),
-                        new Point(878, 528),
-                        new Point(750, 528),
-                        new Point(655, 528),
-                        new Point(522, 528),
-                        new Point(598, 528),
+                        new Point(343, 496),
+                        new Point(589 , 464),
+                        new Point(660, 464),
+                        new Point(929, 464),
+                        new Point(1191, 464),
+                        new Point(1693, 464),
+                        new Point(1481, 464),
+                        new Point(1584, 464),
+                        new Point(1392, 240),
+                        new Point(1297, 240),
+                        new Point(1205, 240),
+                        new Point(851, 240),
+                        new Point(741, 240),
+                        new Point(371, 240),
                 };
 
         Point[] pointsC = new Point[]
                 {
-                        new Point(1010, 528),
-                        new Point(1684, 176),
+                        new Point(2381, 528),
+                        new Point(369, 240),
                 };
 
         for(int i = 0; i < pointsL.length; i++)
@@ -99,10 +95,10 @@ public class Level3State extends GameState
         }
 
         Dodondo dodondo = new Dodondo(tileMap, enemies);
-        dodondo.setPosition(2272,368);
+        dodondo.setPosition(1966,608);
         enemies.add(dodondo);
 
-        /*Flarby flarby = new Flarby(tileMap, true, 128, 0.4, 0.6);
+        Flarby flarby = new Flarby(tileMap, true, 128, 0.4, 0.6);
         flarby.setPosition(749, 350);
         enemies.add(flarby);
 
@@ -128,7 +124,7 @@ public class Level3State extends GameState
 
         flarby = new Flarby(tileMap, false, 128, 0.4, 0.6);
         flarby.setPosition(1837, 140);
-        enemies.add(flarby);*/
+        enemies.add(flarby);
 
     }
 
@@ -213,7 +209,7 @@ public class Level3State extends GameState
             bgMusic.close();
             player.animation.update();
             if(player.winAnimation())
-                gsm.setState(GameStateManager.MENUSTATE);
+                gsm.setState(GameStateManager.LEVEL5STATE);
         }
     }
     public void draw(Graphics2D g)

@@ -1,38 +1,30 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class MenuState extends GameState
+public class WinState extends GameState
 {
     private Background bg;
 
     private int currentChoice = 0;
     private String[] options = {
-            "Start",
-            "Settings",
-            "Quit"
+            "Play Again",
+            "Return to menu"
     };
 
     private Color titleColor;
     private Font titleFont;
-    private Color nomeColor;
-    private Font nomeFont;
     private Font font;
-    private Color menuColor;
 
 
-    public MenuState(GameStateManager gsm)
+    public WinState(GameStateManager gsm)
     {
         this.gsm = gsm;
 
         try
         {
-            bg = new Background("/Backgrounds/Sfondo Bob Menu.png", 1);
-            bg.setVector(-0.1, 0);
+            bg = new Background("/Backgrounds/Sfondo Bob Win.png", 1);
             titleColor = new Color(255, 0, 0);
             titleFont = new Font("Century Gothic", Font.PLAIN, 28);
-            nomeFont = new Font("Century Gothic", Font.PLAIN, 10);
-            nomeColor = Color.BLACK;
-            menuColor = new Color(255,165,0);
 
             font = new Font("Arial", Font.PLAIN, 12);
         }
@@ -63,10 +55,7 @@ public class MenuState extends GameState
         //disegna il titolo
         g.setColor(titleColor);
         g.setFont(titleFont);
-        g.drawString("Bob's Adventure", 50, 70);
-        g.setColor(nomeColor);
-        g.setFont(nomeFont);
-        g.drawString("©Made by Emanuele Cardellini e Andrea Ferragina", 40, 230);
+        g.drawString("YOU WIN", 100, 70);
 
         //disegna menu options
         g.setFont(font);
@@ -74,13 +63,13 @@ public class MenuState extends GameState
         {
             if(i == currentChoice)
             {
-                g.setColor(menuColor);
+                g.setColor(Color.BLUE);
             }
             else
             {
                 g.setColor(Color.BLACK);
             }
-            g.drawString(options[i], 145, 140 + i * 15);
+            g.drawString(options[i], 125, 140 + i * 15);
         }
     }
 
@@ -88,15 +77,11 @@ public class MenuState extends GameState
     {
         if(currentChoice == 0)
         {
-            gsm.setState(GameStateManager.LEVEL2STATE);
+            gsm.setState(GameStateManager.LEVEL1STATE);
         }
         if(currentChoice == 1)
         {
-            gsm.setState(GameStateManager.SETTINGSSTATE);
-        }
-        if(currentChoice == 2)
-        {
-            System.exit(0);
+            gsm.setState(GameStateManager.MENUSTATE);
         }
     }
 
