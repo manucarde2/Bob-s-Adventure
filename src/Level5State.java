@@ -213,7 +213,7 @@ public class Level5State extends GameState
             bgMusic.close();
             player.animation.update();
             if(player.winAnimation())
-                gsm.setState(GameStateManager.MENUSTATE);
+                gsm.setState(GameStateManager.LEVEL6STATE);
         }
     }
     public void draw(Graphics2D g)

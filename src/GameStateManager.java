@@ -12,8 +12,8 @@ public class GameStateManager
     public static final int LEVEL1STATE = 4;
     public static final int LEVEL2STATE = 5;
     public static final int LEVEL3STATE = 6;
-    public static final int LEVEL5STATE = 8;
-    public static final int LEVEL6STATE = 9;
+    public static final int LEVEL5STATE = 7;
+    public static final int LEVEL6STATE = 8;
 
     public static int scale;
     public static int volume;
@@ -60,6 +60,11 @@ public class GameStateManager
         if(state == LEVEL5STATE)
         {
             gameStates[state] = new Level5State(this);
+        }
+
+        if(state == LEVEL6STATE)
+        {
+            gameStates[state] = new Level6State(this);
         }
 
         if(state == GAMEOVERSTATE)

@@ -195,7 +195,7 @@ public class Level1State extends GameState
             bgMusic.close();
             player.animation.update();
             if(player.winAnimation())
-                gsm.setState(GameStateManager.LEVEL3STATE);
+                gsm.setState(GameStateManager.LEVEL2STATE);
         }
     }
     public void draw(Graphics2D g)

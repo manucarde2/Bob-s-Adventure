@@ -50,9 +50,9 @@ public class Level2State extends GameState
         tileMap.addItem(27,6,PowerUp.CURE);
         tileMap.addItem(46,16,PowerUp.FLY);
         tileMap.addItem(72,7,PowerUp.FLY);
-        tileMap.addItem(72,7,PowerUp.FIRE);
-        tileMap.addItem(72,7,PowerUp.FLY);
-        tileMap.addItem(72,7,PowerUp.FLY);
+        tileMap.addItem(85,27,PowerUp.FIRE);
+        tileMap.addItem(109,25,PowerUp.FLY);
+        tileMap.addItem(128,12,PowerUp.FLY);
     }
 
     private  void populateEnemies()
@@ -60,63 +60,61 @@ public class Level2State extends GameState
         enemies = new ArrayList<Enemy>();
 
         Loomby l;
-        Cannon c;
+        Flarby f;
         Point[] pointsL = new Point[]
                 {
-                        new Point(623, 592),
-                        new Point(860, 304),
-                        new Point(2038, 304),
-                        new Point(2119, 304),
-                        new Point(2166, 720),
-                        new Point(2406, 720),
-                        new Point(2193, 720),
-                        new Point(2038, 720),
+                        new Point(831, 336),
+                        new Point(597, 336),
+                        new Point(197, 688),
+                        new Point(369, 720),
+                        new Point(541, 720),
+                        new Point(687, 720),
+                        new Point(824, 2800),
+                        new Point(586, 2864),
+                        new Point(418, 2864),
                 };
 
-        Point[] pointsC = new Point[]
+        Point[] pointsF = new Point[]
                 {
-                        new Point(2253, 720),
-                        new Point(2110, 720),
+                        new Point(554, 1027),
+                        new Point(407, 1128),
+                        new Point(190, 1328),
+                        new Point(320, 1454),
+                        new Point(169, 1751),
+                        new Point(835, 1236),
+                        new Point(521, 1399),
+                        new Point(626, 1798),
+                        new Point(813, 2231),
+                        new Point(611, 2192),
+                        new Point(340, 3177),
+                        new Point(639, 3338),
+                        new Point(869, 3401),
+                        new Point(606, 3924),
+                        new Point(849, 4081),
+                        new Point(603, 4330),
+                        new Point(749, 4296),
+                        new Point(801, 4637),
+                        new Point(111, 4612),
+                        new Point(316, 2232),
+                        new Point(422, 2492),
+                        new Point(191, 3428),
+                        new Point(421, 3566),
+                        new Point(150, 3902),
+                        new Point(209, 4316),
                 };
-
-        /*for(int i = 0; i < pointsL.length; i++)
+        for(int i = 0; i < pointsL.length; i++)
         {
             l = new Loomby(tileMap);
             l.setPosition(pointsL[i].x, pointsL[i].y);
             enemies.add(l);
         }
 
-        for(int i = 0; i < pointsC.length; i++)
+        for(int i = 0; i < pointsF.length; i++)
         {
-            c = new Cannon(tileMap, player);
-            c.setPosition(pointsC[i].x, pointsC[i].y);
-            enemies.add(c);
+            f = new Flarby(tileMap, false, 320, 0.4, 0.6);
+            f.setPosition(pointsF[i].x, pointsF[i].y);
+            enemies.add(f);
         }
-
-        Flarby flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
-        flarby.setPosition(847, 303);
-        enemies.add(flarby);
-
-        flarby = new Flarby(tileMap, true, 300, 0.4, 0.6);
-        flarby.setPosition(1236, 454);
-        enemies.add(flarby);
-
-        flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
-        flarby.setPosition(2587, 182);
-        enemies.add(flarby);
-
-        flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
-        flarby.setPosition(2618, 304);
-        enemies.add(flarby);
-
-        flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
-        flarby.setPosition(2669, 432);
-        enemies.add(flarby);
-
-        flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
-        flarby.setPosition(2670, 624);
-        enemies.add(flarby);*/
-
     }
 
     public void checkCollision()
