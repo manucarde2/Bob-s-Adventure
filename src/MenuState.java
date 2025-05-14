@@ -75,7 +75,7 @@ public class MenuState extends GameState
         g.drawString("Bob's Adventure", 50, 70);
         g.setColor(nomeColor);
         g.setFont(nomeFont);
-        g.drawString("©Made by Emanuele Cardellini e Andrea Ferragina", 40, 230);
+        g.drawString("© Emanuele Cardellini & Andrea Ferragina 2025", 40, 230);
 
         //disegna menu options
         g.setFont(font);
