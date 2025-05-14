@@ -4,16 +4,18 @@ public class GameStateManager
     private int currentState;
     public GamePanel gamePanel;
 
-    public static final int NUMGAMESTATES = 9;
+    public static int CURRENTLEVEL;
+    public static final int NUMGAMESTATES = 10;
     public static final int MENUSTATE = 0;
     public static final int GAMEOVERSTATE = 1;
     public static final int WINSTATE = 2;
     public static final int SETTINGSSTATE = 3;
-    public static final int LEVEL1STATE = 4;
-    public static final int LEVEL2STATE = 5;
-    public static final int LEVEL3STATE = 6;
-    public static final int LEVEL5STATE = 7;
-    public static final int LEVEL6STATE = 8;
+    public static final int TUTORIALSTATE = 4;
+    public static final int LEVEL1STATE = 5;
+    public static final int LEVEL2STATE = 6;
+    public static final int LEVEL3STATE = 7;
+    public static final int LEVEL5STATE = 8;
+    public static final int LEVEL6STATE = 9;
 
     public static int scale;
     public static int volume;
@@ -22,12 +24,16 @@ public class GameStateManager
     {
         this.gamePanel = gamePanel;
         gameStates = new GameState[NUMGAMESTATES];
+        CURRENTLEVEL = 0;
+        volume = 50;
+
+        MenuState.caricamento("BobFile");
+        resizeScale(GameStateManager.scale);
 
         currentState = MENUSTATE;
         loadState(currentState);
 
         scale = GamePanel.SCALE;
-        volume = 50;
     }
 
     private void loadState(int state)
@@ -45,26 +51,31 @@ public class GameStateManager
         if(state == LEVEL1STATE)
         {
             gameStates[state] = new Level1State(this);
+            CURRENTLEVEL = LEVEL1STATE;
         }
 
         if(state == LEVEL2STATE)
         {
             gameStates[state] = new Level2State(this);
+            CURRENTLEVEL = LEVEL2STATE;
         }
 
         if(state == LEVEL3STATE)
         {
             gameStates[state] = new Level3State(this);
+            CURRENTLEVEL = LEVEL3STATE;
         }
 
         if(state == LEVEL5STATE)
         {
             gameStates[state] = new Level5State(this);
+            CURRENTLEVEL = LEVEL5STATE;
         }
 
         if(state == LEVEL6STATE)
         {
             gameStates[state] = new Level6State(this);
+            CURRENTLEVEL = LEVEL6STATE;
         }
 
         if(state == GAMEOVERSTATE)
@@ -75,7 +86,16 @@ public class GameStateManager
         if(state == WINSTATE)
         {
             gameStates[state] = new WinState(this);
+            CURRENTLEVEL = LEVEL1STATE;
         }
+
+        if(state == TUTORIALSTATE)
+        {
+            gameStates[state] = new TutorialState(this);
+            CURRENTLEVEL = LEVEL1STATE;
+        }
+
+        MenuState.salvataggio("BobFile");
     }
 
     private void unloadState(int state)
@@ -131,6 +151,13 @@ public class GameStateManager
 
     public void keyReleased(int k)
     {
-        gameStates[currentState].keyReleased(k);
+        try
+        {
+            gameStates[currentState].keyReleased(k);
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 }

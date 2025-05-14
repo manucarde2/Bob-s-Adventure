@@ -259,7 +259,7 @@ public class Level3State extends GameState
         {
             player.setDown(true);
         }
-        if(k == KeyEvent.VK_W)
+        if(k == KeyEvent.VK_SPACE)
         {
             player.setJumping(true);
         }
@@ -267,15 +267,15 @@ public class Level3State extends GameState
         {
             player.setGliding(true);
         }
-        if(k == KeyEvent.VK_R)
+        if(k == KeyEvent.VK_E)
         {
             player.setScratching();
         }
-        if(k == KeyEvent.VK_F)
+        if(k == KeyEvent.VK_E)
         {
             player.setFiring();
         }
-        if(k == KeyEvent.VK_C)
+        if(k == KeyEvent.VK_E)
         {
             player.setRunning(true);
         }
@@ -302,7 +302,7 @@ public class Level3State extends GameState
         {
             player.setDown(false);
         }
-        if(k == KeyEvent.VK_W)
+        if(k == KeyEvent.VK_SPACE)
         {
             player.setJumping(false);
         }
@@ -310,7 +310,7 @@ public class Level3State extends GameState
         {
             player.setGliding(false);
         }
-        if(k == KeyEvent.VK_C)
+        if(k == KeyEvent.VK_E)
         {
             player.setRunning(false);
         }

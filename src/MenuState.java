@@ -1,5 +1,9 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class MenuState extends GameState
 {
@@ -7,7 +11,8 @@ public class MenuState extends GameState
 
     private int currentChoice = 0;
     private String[] options = {
-            "Start",
+            "New game",
+            "Continue",
             "Settings",
             "Quit"
     };
@@ -88,13 +93,17 @@ public class MenuState extends GameState
     {
         if(currentChoice == 0)
         {
-            gsm.setState(GameStateManager.LEVEL6STATE);
+            gsm.setState(GameStateManager.TUTORIALSTATE);
         }
         if(currentChoice == 1)
         {
-            gsm.setState(GameStateManager.SETTINGSSTATE);
+            gsm.setState(GameStateManager.CURRENTLEVEL);
         }
         if(currentChoice == 2)
+        {
+            gsm.setState(GameStateManager.SETTINGSSTATE);
+        }
+        if(currentChoice == 3)
         {
             System.exit(0);
         }
@@ -122,6 +131,47 @@ public class MenuState extends GameState
             {
                 currentChoice = 0;
             }
+        }
+    }
+
+    public static void salvataggio(String nomeFile)
+    {
+        try
+        {
+            FileOutputStream f = new FileOutputStream(nomeFile+".bin");
+            ObjectOutputStream fOUT = new ObjectOutputStream(f);
+            fOUT.writeInt(GameStateManager.CURRENTLEVEL);
+            fOUT.writeInt(GameStateManager.volume);
+            fOUT.writeInt(GameStateManager.scale);
+            fOUT.flush();
+            System.out.println("salvataggio riuscito");
+            f.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public static void caricamento(String nomeFile)
+    {
+        GameStateManager a;
+        try
+        {
+            FileInputStream f = new FileInputStream(nomeFile+".bin");
+            ObjectInputStream fIN = new ObjectInputStream(f);
+            GameStateManager.CURRENTLEVEL = fIN.readInt();
+            GameStateManager.volume = fIN.readInt();
+            GameStateManager.scale = fIN.readInt();
+            System.out.println("caricamento riuscito");
+            f.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            GameStateManager.CURRENTLEVEL = GameStateManager.LEVEL1STATE;
+            GameStateManager.volume = 50;
+            GameStateManager.scale = 2;
         }
     }
 

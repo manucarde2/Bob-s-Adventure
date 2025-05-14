@@ -725,7 +725,7 @@ public class Player extends MapObject
             {
                 currentAction = JUMPING;
                 animation.setFrames(sprites.get(JUMPING));
-                animation.setDelay(-1);
+                animation.setDelay(100);
                 width = 32;
             }
         }

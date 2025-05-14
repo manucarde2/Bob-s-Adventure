@@ -78,7 +78,7 @@ public class GameOverState extends GameState
     {
         if(currentChoice == 0)
         {
-            gsm.setState(GameStateManager.LEVEL1STATE);
+            gsm.setState(GameStateManager.CURRENTLEVEL);
         }
         if(currentChoice == 1)
         {
