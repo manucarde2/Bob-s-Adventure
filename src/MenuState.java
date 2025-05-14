@@ -1,11 +1,8 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
-public class MenuState extends GameState
+public class MenuState extends GameState implements Serializable
 {
     private Background bg;
 
@@ -145,13 +142,30 @@ public class MenuState extends GameState
     {
         try
         {
-            FileOutputStream f = new FileOutputStream(nomeFile+".bin");
+            String userHome = System.getProperty("user.home");
+            String appFolder;
+
+            // Determina il percorso per ogni sistema operativo
+            if (System.getProperty("os.name").toLowerCase().contains("win")) {
+                appFolder = userHome + "\\AppData\\Local\\BobSalvataggio";
+            } else if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+                appFolder = userHome + "/.config/BobSalvataggio";
+            } else {
+                appFolder = userHome + "/.config/BobSalvataggio";
+            }
+
+            File appDirectory = new File(appFolder);
+            if (!appDirectory.exists()) {
+                appDirectory.mkdirs();
+            }
+
+            File file = new File(appDirectory, nomeFile + ".bin");
+            FileOutputStream f = new FileOutputStream(file);
             ObjectOutputStream fOUT = new ObjectOutputStream(f);
             fOUT.writeInt(GameStateManager.CURRENTLEVEL);
             fOUT.writeInt(GameStateManager.volume);
             fOUT.writeInt(GameStateManager.scale);
             fOUT.flush();
-            System.out.println("salvataggio riuscito");
             f.close();
         }
         catch (Exception e)
@@ -165,12 +179,39 @@ public class MenuState extends GameState
         GameStateManager a;
         try
         {
-            FileInputStream f = new FileInputStream(nomeFile+".bin");
+            String userHome = System.getProperty("user.home");
+            String appFolder;
+
+            if (System.getProperty("os.name").toLowerCase().contains("win")) {
+                appFolder = userHome + "\\AppData\\Local\\BobSalvataggio";
+            } else if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+                appFolder = userHome + "/.config/BobSalvataggio";
+            } else {
+                appFolder = userHome + "/.config/BobSalvataggio";
+            }
+
+            File appDirectory = new File(appFolder);
+            if (!appDirectory.exists()) {
+                appDirectory.mkdirs();
+            }
+
+            File file = new File(appDirectory, nomeFile + ".bin");
+
+            if (!file.exists()) {
+                GameStateManager.CURRENTLEVEL = GameStateManager.LEVEL1STATE;
+                GameStateManager.volume       = 50;
+                GameStateManager.scale        = 2;
+
+                System.out.println("File non trovato, creando file con valori predefiniti...");
+                salvataggio(nomeFile);
+                return;
+            }
+
+            FileInputStream f = new FileInputStream(file);
             ObjectInputStream fIN = new ObjectInputStream(f);
             GameStateManager.CURRENTLEVEL = fIN.readInt();
             GameStateManager.volume = fIN.readInt();
             GameStateManager.scale = fIN.readInt();
-            System.out.println("caricamento riuscito");
             f.close();
         }
         catch (Exception e)

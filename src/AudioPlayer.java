@@ -1,4 +1,5 @@
 import javax.sound.sampled.*;
+import java.io.BufferedInputStream;
 
 public class AudioPlayer
 {
@@ -10,7 +11,7 @@ public class AudioPlayer
         try
         {
             AudioInputStream ais = AudioSystem.getAudioInputStream(
-                    getClass().getResourceAsStream(s)
+                    new BufferedInputStream(getClass().getResourceAsStream(s))
             );
 
             AudioFormat baseFormat = ais.getFormat();

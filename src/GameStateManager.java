@@ -129,25 +129,25 @@ public class GameStateManager
     {
         try
         {
-            gameStates[currentState].update();
+            if(gameStates[currentState] != null)
+                gameStates[currentState].update();
         }
         catch (Exception e)
         {
-
+            e.printStackTrace();
         }
-
-
     }
 
     public void draw(java.awt.Graphics2D g)
     {
         try
         {
-            gameStates[currentState].draw(g);
+            if(gameStates[currentState] != null)
+                gameStates[currentState].draw(g);
         }
         catch (Exception e)
         {
-
+            e.printStackTrace();
         }
     }
 
@@ -164,7 +164,7 @@ public class GameStateManager
         }
         catch (Exception e)
         {
-
+            e.printStackTrace();
         }
     }
 }
