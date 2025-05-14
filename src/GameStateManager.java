@@ -5,7 +5,7 @@ public class GameStateManager
     public GamePanel gamePanel;
 
     public static int CURRENTLEVEL;
-    public static final int NUMGAMESTATES = 10;
+    public static final int NUMGAMESTATES = 11;
     public static final int MENUSTATE = 0;
     public static final int GAMEOVERSTATE = 1;
     public static final int WINSTATE = 2;
@@ -14,8 +14,9 @@ public class GameStateManager
     public static final int LEVEL1STATE = 5;
     public static final int LEVEL2STATE = 6;
     public static final int LEVEL3STATE = 7;
-    public static final int LEVEL5STATE = 8;
-    public static final int LEVEL6STATE = 9;
+    public static final int LEVEL4STATE = 8;
+    public static final int LEVEL5STATE = 9;
+    public static final int LEVEL6STATE = 10;
 
     public static int scale;
     public static int volume;
@@ -64,6 +65,12 @@ public class GameStateManager
         {
             gameStates[state] = new Level3State(this);
             CURRENTLEVEL = LEVEL3STATE;
+        }
+
+        if(state == LEVEL4STATE)
+        {
+            gameStates[state] = new Level4State(this);
+            CURRENTLEVEL = LEVEL4STATE;
         }
 
         if(state == LEVEL5STATE)

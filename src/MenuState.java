@@ -23,6 +23,7 @@ public class MenuState extends GameState
     private Font nomeFont;
     private Font font;
     private Color menuColor;
+    private AudioPlayer bgMusic;
 
 
     public MenuState(GameStateManager gsm)
@@ -45,6 +46,9 @@ public class MenuState extends GameState
         {
             e.printStackTrace();
         }
+        bgMusic = new AudioPlayer("/Music/Bob-l_Avventuriero-1.wav");
+        bgMusic.setVolume(GameStateManager.volume);
+        bgMusic.playLoop();
     }
 
     @Override
@@ -94,14 +98,17 @@ public class MenuState extends GameState
         if(currentChoice == 0)
         {
             gsm.setState(GameStateManager.TUTORIALSTATE);
+            bgMusic.close();
         }
         if(currentChoice == 1)
         {
             gsm.setState(GameStateManager.CURRENTLEVEL);
+            bgMusic.close();
         }
         if(currentChoice == 2)
         {
             gsm.setState(GameStateManager.SETTINGSSTATE);
+            bgMusic.close();
         }
         if(currentChoice == 3)
         {

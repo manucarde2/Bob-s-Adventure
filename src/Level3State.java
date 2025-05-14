@@ -40,9 +40,9 @@ public class Level3State extends GameState
 
         hud = new HUD(player);
 
-        bgMusic = new AudioPlayer("/Music/soundtrack 2.wav");
+        bgMusic = new AudioPlayer("/Music/Bob-nel-Deserto-1.wav");
         bgMusic.setVolume(GameStateManager.volume);
-        bgMusic.play();
+        bgMusic.playLoop();
 
         tileMap.addItem(13,10,PowerUp.SPEED);
         tileMap.addItem(17,61,PowerUp.FIGHT);
@@ -209,7 +209,7 @@ public class Level3State extends GameState
             bgMusic.close();
             player.animation.update();
             if(player.winAnimation())
-                gsm.setState(GameStateManager.LEVEL5STATE);
+                gsm.setState(GameStateManager.LEVEL4STATE);
         }
     }
     public void draw(Graphics2D g)

@@ -14,6 +14,7 @@ public class WinState extends GameState
     private Color titleColor;
     private Font titleFont;
     private Font font;
+    private AudioPlayer bgMusic;
 
 
     public WinState(GameStateManager gsm)
@@ -32,6 +33,9 @@ public class WinState extends GameState
         {
             e.printStackTrace();
         }
+        bgMusic = new AudioPlayer("/Music/Bob-l_Avventuriero-2.wav");
+        bgMusic.setVolume(GameStateManager.volume);
+        bgMusic.playLoop();
     }
 
     @Override
@@ -78,10 +82,12 @@ public class WinState extends GameState
         if(currentChoice == 0)
         {
             gsm.setState(GameStateManager.LEVEL1STATE);
+            bgMusic.close();
         }
         if(currentChoice == 1)
         {
             gsm.setState(GameStateManager.MENUSTATE);
+            bgMusic.close();
         }
     }
 

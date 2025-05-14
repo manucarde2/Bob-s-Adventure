@@ -40,9 +40,9 @@ public class Level1State extends GameState
 
         hud = new HUD(player);
 
-        bgMusic = new AudioPlayer("/Music/soundtrack 1.wav");
+        bgMusic = new AudioPlayer("/Music/L_avventura-di-Bob-1.wav");
         bgMusic.setVolume(GameStateManager.volume);
-        bgMusic.play();
+        bgMusic.playLoop();
 
         tileMap.addItem(19,6,PowerUp.FIRE);
         tileMap.addItem(12,26,PowerUp.CURE);

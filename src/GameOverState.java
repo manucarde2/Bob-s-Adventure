@@ -14,6 +14,7 @@ public class GameOverState extends GameState
     private Color titleColor;
     private Font titleFont;
     private Font font;
+    private AudioPlayer bgMusic;
 
 
     public GameOverState(GameStateManager gsm)
@@ -33,6 +34,9 @@ public class GameOverState extends GameState
         {
             e.printStackTrace();
         }
+        bgMusic = new AudioPlayer("/Music/Bob-e-la-sua-sconfitta.wav");
+        bgMusic.setVolume(GameStateManager.volume);
+        bgMusic.playLoop();
     }
 
     @Override
@@ -79,10 +83,12 @@ public class GameOverState extends GameState
         if(currentChoice == 0)
         {
             gsm.setState(GameStateManager.CURRENTLEVEL);
+            bgMusic.close();
         }
         if(currentChoice == 1)
         {
             gsm.setState(GameStateManager.MENUSTATE);
+            bgMusic.close();
         }
     }
 

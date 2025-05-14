@@ -40,9 +40,9 @@ public class Level6State extends GameState
 
         hud = new HUD(player);
 
-        bgMusic = new AudioPlayer("/Music/soundtrack 3.wav");
+        bgMusic = new AudioPlayer("/Music/Bob-e-le-Grotte-di-Gemme-2.wav");
         bgMusic.setVolume(GameStateManager.volume);
-        bgMusic.play();
+        bgMusic.playLoop();
 
         tileMap.addItem(12,9,PowerUp.SPEED);
         tileMap.addItem(12, 30, PowerUp.SPEED);
