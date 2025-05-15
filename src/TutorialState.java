@@ -88,7 +88,7 @@ public class TutorialState extends GameState {
 
 
     private void select() {
-        gsm.setState(GameStateManager.LEVEL6STATE);
+        gsm.setState(GameStateManager.LEVEL1STATE);
     }
 
     @Override

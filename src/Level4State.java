@@ -96,11 +96,11 @@ public class Level4State extends GameState
         }
 
         Dodondo dodondo1 = new Dodondo(tileMap, enemies);
-        dodondo1.setPosition(1736,1808);
+        dodondo1.setPosition(1736,1770);
         enemies.add(dodondo1);
 
         Dodondo dodondo2 = new Dodondo(tileMap, enemies);
-        dodondo2.setPosition(1919,2128);
+        dodondo2.setPosition(1919,2090);
         enemies.add(dodondo2);
     }
 
