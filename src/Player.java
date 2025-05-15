@@ -205,6 +205,7 @@ public class Player extends MapObject
         sfx = new HashMap<String, AudioPlayer>();
         sfx.put("jump", new AudioPlayer("/SoundEffects/jump.wav"));
         sfx.put("scratch", new AudioPlayer("/SoundEffects/hitHurt.wav"));
+        sfx.put("powerUp", new AudioPlayer("/SoundEffects/powerUp.wav"));
     }
 
     public int getHealt()
@@ -332,10 +333,11 @@ public class Player extends MapObject
         {
             PowerUp p = powerUps.get(i);
 
-            //check enemy collision
             if(intersects(p))
             {
                 changeAbility(p.usePowerUp());
+                sfx.get("powerUp").setVolume(GameStateManager.effectVolume);
+                sfx.get("powerUp").play();
             }
         }
     }
@@ -425,6 +427,8 @@ public class Player extends MapObject
                 else
                 {
                     hit(e.getDamage());
+                    sfx.get("scratch").setVolume(GameStateManager.effectVolume);
+                    sfx.get("scratch").play();
                 }
             }
 

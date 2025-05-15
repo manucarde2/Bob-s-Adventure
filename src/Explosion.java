@@ -17,6 +17,8 @@ public class Explosion
 
     private boolean remove;
 
+    AudioPlayer explosionSound;
+
     public Explosion(int x, int y)
     {
         this.x = x;
@@ -48,6 +50,10 @@ public class Explosion
         animation = new Animation();
         animation.setFrames(sprites);
         animation.setDelay(70);
+
+        explosionSound = new AudioPlayer("/SoundEffects/explosion.wav");
+        explosionSound.setVolume(GameStateManager.effectVolume);
+        explosionSound.play();
     }
 
     public void update()
