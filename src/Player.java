@@ -427,8 +427,6 @@ public class Player extends MapObject
                 else
                 {
                     hit(e.getDamage());
-                    sfx.get("scratch").setVolume(GameStateManager.effectVolume);
-                    sfx.get("scratch").play();
                 }
             }
 
@@ -452,6 +450,8 @@ public class Player extends MapObject
         {
             changeAbility(PNORMAL);
             if(flinching) return;
+            sfx.get("scratch").setVolume(GameStateManager.effectVolume);
+            sfx.get("scratch").play();
             healt -= damage;
             if(healt < 0) healt = 0;
             if(healt == 0) dead = true;
