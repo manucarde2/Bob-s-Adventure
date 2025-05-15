@@ -217,8 +217,8 @@ public class Level3State extends GameState
         String[] options = {
                 "Press Arrow Right to Move Right",
                 "Press Arrow Left to Move Left",
-                "Press Space to Jump",
-                "Press E to Use Ability"
+                "Press Z to Jump",
+                "Press X to Use Ability"
         };
 
         Color titleColor = new Color(255, 0, 0); // Colore rosso per il titolo
