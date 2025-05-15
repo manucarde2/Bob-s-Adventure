@@ -8,7 +8,8 @@ public class TutorialState extends GameState {
             "Press Arrow Right to Move Right",
             "Press Arrow Left to Move Left",
             "Press Z to Jump",
-            "Press X to Use Ability"
+            "Press X to Use Ability",
+            "Press Escape to pause the game"
     };
 
     private Color titleColor;
