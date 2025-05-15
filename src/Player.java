@@ -506,6 +506,7 @@ public class Player extends MapObject
         //salto
         if(jumping && !falling)
         {
+            sfx.get("jump").setVolume(GameStateManager.effectVolume);
             sfx.get("jump").play();
             dy = jumpStart;
             falling = true;
@@ -663,6 +664,7 @@ public class Player extends MapObject
         {
             if(currentAction != SCRATCHING)
             {
+                sfx.get("scratch").setVolume(GameStateManager.effectVolume);
                 sfx.get("scratch").play();
                 currentAction = SCRATCHING;
                 animation.setFrames(sprites.get(SCRATCHING));

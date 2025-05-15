@@ -7,7 +7,8 @@ public class SettingsState extends GameState
 
     private int currentChoice = 0;
     private String[] options = {
-            "Volume",
+            "Music",
+            "Sound Effects",
             "Screen Scale",
             "Return to menu"
     };
@@ -17,10 +18,6 @@ public class SettingsState extends GameState
     private Color titleColor;
     private Font titleFont;
     private Font font;
-
-    // Larghezza e altezza del GamePanel
-    private final int panelWidth = 320;
-    private final int panelHeight = 240;
 
     // Offset verticale per abbassare le voci
     private final int verticalOffset = 30;
@@ -32,7 +29,7 @@ public class SettingsState extends GameState
         try
         {
             bg = new Background("/Backgrounds/Sfondo Bob GameOver.png", 1);
-            bg.setVector(-0.1, 0);
+            bg.setVector(-0.1, 0, 0, 0);
             titleColor = new Color(255, 0, 0);
             titleFont = new Font("Century Gothic", Font.PLAIN, 28);
 
@@ -90,14 +87,21 @@ public class SettingsState extends GameState
 
         // Posizione verticale delle barre, abbassata con offset
         int volumeY = 90 + verticalOffset;  // Posizione verticale della barra volume
-        int scaleY = 130 + verticalOffset;  // Posizione verticale della barra screen scale
+        int volumeSY = 130 + verticalOffset;  // Posizione verticale della barra volume
+        int scaleY = 170 + verticalOffset;  // Posizione verticale della barra screen scale
 
         // Disegna il volume con la barra
         g.setColor(Color.white);
-        g.drawString("Volume: " + GameStateManager.volume, barX, volumeY - 10);  // Etichetta volume sopra la barra
+        g.drawString("Music: " + GameStateManager.musicVolume, barX, volumeY - 10);  // Etichetta volume sopra la barra
         g.drawRect(barX, volumeY, barWidth, 10);  // Barra volume
         g.setColor(Color.blue);
-        g.fillRect(barX, volumeY, GameStateManager.volume, 10); // Riempie la barra in base al volume
+        g.fillRect(barX, volumeY, GameStateManager.musicVolume, 10); // Riempie la barra in base al volume
+
+        g.setColor(Color.white);
+        g.drawString("Sound Effects: " + GameStateManager.effectVolume, barX, volumeSY - 10);
+        g.drawRect(barX, volumeSY, barWidth, 10);  // Barra volume
+        g.setColor(Color.blue);
+        g.fillRect(barX, volumeSY, GameStateManager.effectVolume, 10);
 
         // Disegna la scala dello schermo con il valore
         g.setColor(Color.white);
@@ -115,9 +119,13 @@ public class SettingsState extends GameState
         }
         if(currentChoice == 1)
         {
-            // Si può regolare la scala dello schermo
+            // Si può regolare il volume degli effetti usando la barra (sinistra/destra)
         }
         if(currentChoice == 2)
+        {
+            // Si può regolare la scala dello schermo
+        }
+        if(currentChoice == 3)
         {
             gsm.setState(GameStateManager.MENUSTATE);  // Torna al menu
         }
@@ -150,11 +158,15 @@ public class SettingsState extends GameState
         // Aggiungere la logica per modificare il volume
         if(k == KeyEvent.VK_LEFT)
         {
-            if(currentChoice == 0 && GameStateManager.volume > 0)  // Volume
+            if(currentChoice == 0 && GameStateManager.musicVolume > 0)  // Volume
             {
-                GameStateManager.volume--;
+                GameStateManager.musicVolume--;
             }
-            if(currentChoice == 1 && screenScale > 1)  // Screen scale
+            if(currentChoice == 1 && GameStateManager.effectVolume > 0)  // Screen scale
+            {
+                GameStateManager.effectVolume--;
+            }
+            if(currentChoice == 2 && screenScale > 1)  // Screen scale
             {
                 screenScale--;
             }
@@ -162,15 +174,20 @@ public class SettingsState extends GameState
 
         if(k == KeyEvent.VK_RIGHT)
         {
-            if(currentChoice == 0 && GameStateManager.volume < 100)  // Volume
+            if(currentChoice == 0 && GameStateManager.musicVolume < 100)  // Volume
             {
-                GameStateManager.volume++;
+                GameStateManager.musicVolume++;
             }
-            if(currentChoice == 1 && screenScale < 5)  // Screen scale
+            if(currentChoice == 1 && GameStateManager.effectVolume < 100)  // Screen scale
+            {
+                GameStateManager.effectVolume++;
+            }
+            if(currentChoice == 2 && screenScale < 5)  // Screen scale
             {
                 screenScale++;
             }
         }
+
         if(screenScale != GameStateManager.scale)
             gsm.resizeScale(screenScale);
     }

@@ -30,7 +30,7 @@ public class MenuState extends GameState implements Serializable
         try
         {
             bg = new Background("/Backgrounds/Sfondo Bob Menu.png", 1);
-            bg.setVector(-0.1, 0);
+            bg.setVector(-0.1, 0, 0, 0);
             titleColor = new Color(255, 0, 0);
             titleFont = new Font("Century Gothic", Font.PLAIN, 28);
             nomeFont = new Font("Century Gothic", Font.PLAIN, 10);
@@ -44,7 +44,7 @@ public class MenuState extends GameState implements Serializable
             e.printStackTrace();
         }
         bgMusic = new AudioPlayer("/Music/Bob-l_Avventuriero-1.wav");
-        bgMusic.setVolume(GameStateManager.volume);
+        bgMusic.setVolume(GameStateManager.musicVolume);
         bgMusic.playLoop();
     }
 
@@ -163,7 +163,8 @@ public class MenuState extends GameState implements Serializable
             FileOutputStream f = new FileOutputStream(file);
             ObjectOutputStream fOUT = new ObjectOutputStream(f);
             fOUT.writeInt(GameStateManager.CURRENTLEVEL);
-            fOUT.writeInt(GameStateManager.volume);
+            fOUT.writeInt(GameStateManager.musicVolume);
+            fOUT.writeInt(GameStateManager.effectVolume);
             fOUT.writeInt(GameStateManager.scale);
             fOUT.flush();
             f.close();
@@ -199,7 +200,8 @@ public class MenuState extends GameState implements Serializable
 
             if (!file.exists()) {
                 GameStateManager.CURRENTLEVEL = GameStateManager.LEVEL1STATE;
-                GameStateManager.volume       = 50;
+                GameStateManager.musicVolume = 50;
+                GameStateManager.effectVolume = 50;
                 GameStateManager.scale        = 2;
 
                 System.out.println("File non trovato, creando file con valori predefiniti...");
@@ -210,7 +212,8 @@ public class MenuState extends GameState implements Serializable
             FileInputStream f = new FileInputStream(file);
             ObjectInputStream fIN = new ObjectInputStream(f);
             GameStateManager.CURRENTLEVEL = fIN.readInt();
-            GameStateManager.volume = fIN.readInt();
+            GameStateManager.musicVolume = fIN.readInt();
+            GameStateManager.effectVolume = fIN.readInt();
             GameStateManager.scale = fIN.readInt();
             f.close();
         }
@@ -218,7 +221,8 @@ public class MenuState extends GameState implements Serializable
         {
             e.printStackTrace();
             GameStateManager.CURRENTLEVEL = GameStateManager.LEVEL1STATE;
-            GameStateManager.volume = 50;
+            GameStateManager.musicVolume = 50;
+            GameStateManager.effectVolume = 50;
             GameStateManager.scale = 2;
         }
     }

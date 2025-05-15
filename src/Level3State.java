@@ -41,7 +41,7 @@ public class Level3State extends GameState
         hud = new HUD(player);
 
         bgMusic = new AudioPlayer("/Music/Bob-nel-Deserto-1.wav");
-        bgMusic.setVolume(GameStateManager.volume);
+        bgMusic.setVolume(GameStateManager.musicVolume);
         bgMusic.playLoop();
 
         tileMap.addItem(13,10,PowerUp.SPEED);

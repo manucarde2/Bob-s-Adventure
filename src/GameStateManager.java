@@ -19,14 +19,16 @@ public class GameStateManager
     public static final int LEVEL6STATE = 10;
 
     public static int scale;
-    public static int volume;
+    public static int musicVolume;
+    public static int effectVolume;
 
     public GameStateManager(GamePanel gamePanel)
     {
         this.gamePanel = gamePanel;
         gameStates = new GameState[NUMGAMESTATES];
         CURRENTLEVEL = 0;
-        volume = 50;
+        musicVolume = 50;
+        effectVolume = 50;
 
         MenuState.caricamento("BobFile");
         resizeScale(GameStateManager.scale);

@@ -34,7 +34,7 @@ public class WinState extends GameState
             e.printStackTrace();
         }
         bgMusic = new AudioPlayer("/Music/Bob-l_Avventuriero-2.wav");
-        bgMusic.setVolume(GameStateManager.volume);
+        bgMusic.setVolume(GameStateManager.musicVolume);
         bgMusic.playLoop();
     }
 

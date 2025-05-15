@@ -20,7 +20,7 @@ public class TutorialState extends GameState {
         this.gsm = gsm;
         try {
             bg = new Background("/Backgrounds/Sfondo Bob Menu.png", 1);
-            bg.setVector(-0.1, 0);
+            bg.setVector(-0.1, 0, 0, 0);
             titleColor = new Color(255, 0, 0); // Colore rosso per il titolo
             titleFont = new Font("Century Gothic", Font.BOLD, 32); // Titolo
             font = new Font("Arial", Font.PLAIN, 14); // Testo delle istruzioni

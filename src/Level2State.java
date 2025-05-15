@@ -41,7 +41,7 @@ public class Level2State extends GameState
         hud = new HUD(player);
 
         bgMusic = new AudioPlayer("/Music/L_avventura-di-Bob-2.wav");
-        bgMusic.setVolume(GameStateManager.volume);
+        bgMusic.setVolume(GameStateManager.musicVolume);
         bgMusic.playLoop();
 
         tileMap.addItem(8,22,PowerUp.FLY);

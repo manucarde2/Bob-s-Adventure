@@ -11,6 +11,9 @@ public class Background
     private double dx;
     private double dy;
 
+    private double xi;
+    private double yi;
+
     private double moveScale;
 
     public Background(String s, double ms)
@@ -24,6 +27,8 @@ public class Background
         {
             e.printStackTrace();
         }
+        xi = x;
+        yi = y;
     }
 
     public void setPosition(double x, double y)
@@ -32,16 +37,26 @@ public class Background
         //this.y = (y*moveScale)%GamePanel.HEIGHT;
     }
 
-    public void setVector(double dx, double dy)
+    public void setVector(double dx, double dy, double xi, double yi)
     {
         this.dx = dx;
         this.dy = dy;
+        this.xi = yi;
+        this.yi = yi;
     }
 
     public void update()
     {
         x += dx;
         y += dy;
+        if ((xi+x)<=-GamePanel.WIDTH || (xi+x)>= GamePanel.WIDTH)
+        {
+            x=xi;
+        }
+        if ((yi+y)>=-GamePanel.WIDTH || (yi+y)>= GamePanel.WIDTH)
+        {
+            y=yi;
+        }
     }
 
     public void draw(Graphics2D g)
