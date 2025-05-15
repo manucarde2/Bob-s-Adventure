@@ -1,6 +1,7 @@
 public abstract class GameState
 {
     protected GameStateManager gsm;
+    protected Boolean pause = false;
 
     public abstract void init();
     public abstract void update();

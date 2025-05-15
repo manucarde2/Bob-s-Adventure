@@ -216,6 +216,69 @@ public class Level5State extends GameState
                 gsm.setState(GameStateManager.LEVEL6STATE);
         }
     }
+
+    public void drawPauseMenu(Graphics2D g) {
+        String[] options = {
+                "Press Arrow Right to Move Right",
+                "Press Arrow Left to Move Left",
+                "Press Space to Jump",
+                "Press E to Use Ability"
+        };
+
+        Color titleColor = new Color(255, 0, 0); // Colore rosso per il titolo
+        Font titleFont = new Font("Century Gothic", Font.BOLD, 32); // Titolo
+        Font font = new Font("Arial", Font.PLAIN, 14); // Testo delle istruzioni
+
+        g.setColor(new Color(0, 0, 0, 150)); // Nero con alpha 150 su 255
+        g.fillRoundRect(20, 60, 280, 160, 20, 20);
+
+        // Titolo centrato
+        g.setFont(titleFont);
+        String title = "PAUSE";
+        FontMetrics titleMetrics = g.getFontMetrics();
+        int titleX = (320 - titleMetrics.stringWidth(title)) / 2;
+        g.setColor(titleColor);
+        g.drawString(title, titleX, 40);
+
+        // Istruzioni con ombra
+        g.setFont(font);
+        int startY = 80;
+        for (int i = 0; i < options.length; i++) {
+            int textWidth = g.getFontMetrics().stringWidth(options[i]);
+            int textX = (320 - textWidth) / 2;
+
+            g.setColor(Color.BLACK);
+            g.drawString(options[i], textX + 1, startY + i * 22 + 1); // Ombra
+
+            g.setColor(Color.WHITE);
+            g.drawString(options[i], textX, startY + i * 22); // Testo
+        }
+
+        String continueMessage = "Press Escape to continue";
+        String menuMessage = "Press Cancel to turn to the Menu";
+
+        g.setFont(new Font("Arial", Font.BOLD, 16));
+        int finalMessageWidth = g.getFontMetrics().stringWidth(menuMessage);
+        int finalMessageX = (320 - finalMessageWidth) / 2;
+
+        g.setColor(Color.BLACK);
+        g.drawString(menuMessage, finalMessageX + 1, 211); // Ombra
+
+        g.setColor(Color.YELLOW);
+        g.drawString(menuMessage, finalMessageX, 210); // Testo
+
+        g.setColor(Color.BLACK);
+        g.drawString(continueMessage, finalMessageX + 25 + 1, 181); // Ombra
+
+        g.setColor(Color.YELLOW);
+        g.drawString(continueMessage, finalMessageX + 25, 180); // Testo
+
+        // Cornice gialla con margini aumentati
+        g.setColor(Color.YELLOW);
+        g.setStroke(new BasicStroke(2));
+        g.drawRoundRect(20, 60, 280, 160, 20, 20);
+    }
+
     public void draw(Graphics2D g)
     {
         //sfondo
@@ -244,6 +307,11 @@ public class Level5State extends GameState
         }
 
         hud.draw(g);
+
+        if (pause)
+        {
+            drawPauseMenu(g);
+        }
     }
     public void keyPressed(int k)
     {
@@ -255,37 +323,49 @@ public class Level5State extends GameState
         {
             player.setRight(true);
         }
-        if(k == KeyEvent.VK_UP)
+        if(k == KeyEvent.VK_Z)
         {
             player.setUp(true);
+            player.setJumping(true);
         }
         if(k == KeyEvent.VK_DOWN)
         {
             player.setDown(true);
         }
-        if(k == KeyEvent.VK_SPACE)
-        {
-            player.setJumping(true);
-        }
-        if(k == KeyEvent.VK_E)
+        if(k == KeyEvent.VK_X)
         {
             player.setGliding(true);
         }
-        if(k == KeyEvent.VK_E)
+        if(k == KeyEvent.VK_X)
         {
             player.setScratching();
         }
-        if(k == KeyEvent.VK_E)
+        if(k == KeyEvent.VK_X)
         {
             player.setFiring();
         }
-        if(k == KeyEvent.VK_E)
+        if(k == KeyEvent.VK_X)
         {
             player.setRunning(true);
         }
-        if(k == KeyEvent.VK_O)
+        if(k == KeyEvent.VK_SPACE)
         {
             System.out.println("x: " + player.getX() + " y: " + player.getY());
+        }
+        if(k == KeyEvent.VK_ESCAPE) {
+            pause = !pause;
+            if(pause)
+            {
+                bgMusic.pause();
+            }
+
+            else
+                bgMusic.resume();
+        }
+        if(k == KeyEvent.VK_BACK_SPACE && pause)
+        {
+            pause = false;
+            gsm.setState(GameStateManager.MENUSTATE);
         }
     }
     public void keyReleased(int k)
@@ -298,23 +378,20 @@ public class Level5State extends GameState
         {
             player.setRight(false);
         }
-        if(k == KeyEvent.VK_UP)
+        if(k == KeyEvent.VK_Z)
         {
             player.setUp(false);
+            player.setJumping(false);
         }
         if(k == KeyEvent.VK_DOWN)
         {
             player.setDown(false);
         }
-        if(k == KeyEvent.VK_SPACE)
-        {
-            player.setJumping(false);
-        }
-        if(k == KeyEvent.VK_E)
+        if(k == KeyEvent.VK_X)
         {
             player.setGliding(false);
         }
-        if(k == KeyEvent.VK_E)
+        if(k == KeyEvent.VK_X)
         {
             player.setRunning(false);
         }

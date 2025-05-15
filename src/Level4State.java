@@ -44,10 +44,12 @@ public class Level4State extends GameState
         bgMusic.setVolume(GameStateManager.musicVolume);
         bgMusic.playLoop();
 
-        tileMap.addItem(13,10,PowerUp.SPEED);
-        tileMap.addItem(17,61,PowerUp.FIGHT);
-        tileMap.addItem(9,73,PowerUp.STAMINA);
-        tileMap.addItem(5,24,PowerUp.FIRE);
+        tileMap.addItem(67,9,PowerUp.SPEED);
+        tileMap.addItem(36,27,PowerUp.STAMINA);
+        tileMap.addItem(20,60,PowerUp.FIRE);
+        tileMap.addItem(34,55,PowerUp.CURE);
+        tileMap.addItem(44,50,PowerUp.FIRE);
+        tileMap.addItem(64,31,PowerUp.STAMINA);
     }
 
     private  void populateEnemies()
@@ -58,29 +60,28 @@ public class Level4State extends GameState
         Cannon c;
         Point[] pointsL = new Point[]
                 {
-                        new Point(343, 496),
-                        new Point(589 , 464),
-                        new Point(660, 464),
-                        new Point(929, 464),
-                        new Point(1191, 464),
-                        new Point(1693, 464),
-                        new Point(1481, 464),
-                        new Point(1584, 464),
-                        new Point(1392, 240),
-                        new Point(1297, 240),
-                        new Point(1205, 240),
-                        new Point(851, 240),
-                        new Point(741, 240),
-                        new Point(371, 240),
+                    new Point(2109,  720),
+                    new Point(1941,  720),
+                    new Point(1809,  720),
+                    new Point(1603,  848),
+                    new Point(1608, 1488),
+                    new Point(1569, 1488),
+                    new Point( 976, 2128),
+                    new Point( 931, 2128),
+                    new Point(1814, 1808),
+                    new Point(2084, 1808),
+                    new Point(1979, 2128)
                 };
 
         Point[] pointsC = new Point[]
                 {
-                        new Point(2381, 528),
-                        new Point(369, 240),
+                    new Point(1447, 1168),
+                    new Point(1930, 1488),
+                    new Point(1288, 2128),
+                    new Point(2247, 2128)
                 };
 
-        /*for(int i = 0; i < pointsL.length; i++)
+        for(int i = 0; i < pointsL.length; i++)
         {
             l = new Loomby(tileMap);
             l.setPosition(pointsL[i].x, pointsL[i].y);
@@ -94,38 +95,13 @@ public class Level4State extends GameState
             enemies.add(c);
         }
 
-        Dodondo dodondo = new Dodondo(tileMap, enemies);
-        dodondo.setPosition(1966,608);
-        enemies.add(dodondo);
+        Dodondo dodondo1 = new Dodondo(tileMap, enemies);
+        dodondo1.setPosition(1736,1808);
+        enemies.add(dodondo1);
 
-        Flarby flarby = new Flarby(tileMap, true, 128, 0.4, 0.6);
-        flarby.setPosition(749, 350);
-        enemies.add(flarby);
-
-        flarby = new Flarby(tileMap, true, 128, 0.4, 0.6);
-        flarby.setPosition(1008, 350);
-        enemies.add(flarby);
-
-        flarby = new Flarby(tileMap, true, 128, 0.4, 0.6);
-        flarby.setPosition(1268, 350);
-        enemies.add(flarby);
-
-        flarby = new Flarby(tileMap, false, 300, 0.4, 0.6);
-        flarby.setPosition(1909, 324);
-        enemies.add(flarby);
-
-        flarby = new Flarby(tileMap, false, 128, 0.4, 0.6);
-        flarby.setPosition(1998, 140);
-        enemies.add(flarby);
-
-        flarby = new Flarby(tileMap, false, 128, 0.4, 0.6);
-        flarby.setPosition(1837, 140);
-        enemies.add(flarby);
-
-        flarby = new Flarby(tileMap, false, 128, 0.4, 0.6);
-        flarby.setPosition(1837, 140);
-        enemies.add(flarby);*/
-
+        Dodondo dodondo2 = new Dodondo(tileMap, enemies);
+        dodondo2.setPosition(1919,2128);
+        enemies.add(dodondo2);
     }
 
     public void checkCollision()
@@ -212,6 +188,69 @@ public class Level4State extends GameState
                 gsm.setState(GameStateManager.LEVEL5STATE);
         }
     }
+
+    public void drawPauseMenu(Graphics2D g) {
+        String[] options = {
+                "Press Arrow Right to Move Right",
+                "Press Arrow Left to Move Left",
+                "Press Space to Jump",
+                "Press E to Use Ability"
+        };
+
+        Color titleColor = new Color(255, 0, 0); // Colore rosso per il titolo
+        Font titleFont = new Font("Century Gothic", Font.BOLD, 32); // Titolo
+        Font font = new Font("Arial", Font.PLAIN, 14); // Testo delle istruzioni
+
+        g.setColor(new Color(0, 0, 0, 150)); // Nero con alpha 150 su 255
+        g.fillRoundRect(20, 60, 280, 160, 20, 20);
+
+        // Titolo centrato
+        g.setFont(titleFont);
+        String title = "PAUSE";
+        FontMetrics titleMetrics = g.getFontMetrics();
+        int titleX = (320 - titleMetrics.stringWidth(title)) / 2;
+        g.setColor(titleColor);
+        g.drawString(title, titleX, 40);
+
+        // Istruzioni con ombra
+        g.setFont(font);
+        int startY = 80;
+        for (int i = 0; i < options.length; i++) {
+            int textWidth = g.getFontMetrics().stringWidth(options[i]);
+            int textX = (320 - textWidth) / 2;
+
+            g.setColor(Color.BLACK);
+            g.drawString(options[i], textX + 1, startY + i * 22 + 1); // Ombra
+
+            g.setColor(Color.WHITE);
+            g.drawString(options[i], textX, startY + i * 22); // Testo
+        }
+
+        String continueMessage = "Press Escape to continue";
+        String menuMessage = "Press Cancel to turn to the Menu";
+
+        g.setFont(new Font("Arial", Font.BOLD, 16));
+        int finalMessageWidth = g.getFontMetrics().stringWidth(menuMessage);
+        int finalMessageX = (320 - finalMessageWidth) / 2;
+
+        g.setColor(Color.BLACK);
+        g.drawString(menuMessage, finalMessageX + 1, 211); // Ombra
+
+        g.setColor(Color.YELLOW);
+        g.drawString(menuMessage, finalMessageX, 210); // Testo
+
+        g.setColor(Color.BLACK);
+        g.drawString(continueMessage, finalMessageX + 25 + 1, 181); // Ombra
+
+        g.setColor(Color.YELLOW);
+        g.drawString(continueMessage, finalMessageX + 25, 180); // Testo
+
+        // Cornice gialla con margini aumentati
+        g.setColor(Color.YELLOW);
+        g.setStroke(new BasicStroke(2));
+        g.drawRoundRect(20, 60, 280, 160, 20, 20);
+    }
+
     public void draw(Graphics2D g)
     {
         //sfondo
@@ -240,6 +279,11 @@ public class Level4State extends GameState
         }
 
         hud.draw(g);
+
+        if (pause)
+        {
+            drawPauseMenu(g);
+        }
     }
     public void keyPressed(int k)
     {
@@ -251,37 +295,49 @@ public class Level4State extends GameState
         {
             player.setRight(true);
         }
-        if(k == KeyEvent.VK_UP)
+        if(k == KeyEvent.VK_Z)
         {
             player.setUp(true);
+            player.setJumping(true);
         }
         if(k == KeyEvent.VK_DOWN)
         {
             player.setDown(true);
         }
-        if(k == KeyEvent.VK_SPACE)
-        {
-            player.setJumping(true);
-        }
-        if(k == KeyEvent.VK_E)
+        if(k == KeyEvent.VK_X)
         {
             player.setGliding(true);
         }
-        if(k == KeyEvent.VK_E)
+        if(k == KeyEvent.VK_X)
         {
             player.setScratching();
         }
-        if(k == KeyEvent.VK_E)
+        if(k == KeyEvent.VK_X)
         {
             player.setFiring();
         }
-        if(k == KeyEvent.VK_E)
+        if(k == KeyEvent.VK_X)
         {
             player.setRunning(true);
         }
-        if(k == KeyEvent.VK_O)
+        if(k == KeyEvent.VK_SPACE)
         {
             System.out.println("x: " + player.getX() + " y: " + player.getY());
+        }
+        if(k == KeyEvent.VK_ESCAPE) {
+            pause = !pause;
+            if(pause)
+            {
+                bgMusic.pause();
+            }
+
+            else
+                bgMusic.resume();
+        }
+        if(k == KeyEvent.VK_BACK_SPACE && pause)
+        {
+            pause = false;
+            gsm.setState(GameStateManager.MENUSTATE);
         }
     }
     public void keyReleased(int k)
@@ -294,23 +350,20 @@ public class Level4State extends GameState
         {
             player.setRight(false);
         }
-        if(k == KeyEvent.VK_UP)
+        if(k == KeyEvent.VK_Z)
         {
             player.setUp(false);
+            player.setJumping(false);
         }
         if(k == KeyEvent.VK_DOWN)
         {
             player.setDown(false);
         }
-        if(k == KeyEvent.VK_SPACE)
-        {
-            player.setJumping(false);
-        }
-        if(k == KeyEvent.VK_E)
+        if(k == KeyEvent.VK_X)
         {
             player.setGliding(false);
         }
-        if(k == KeyEvent.VK_E)
+        if(k == KeyEvent.VK_X)
         {
             player.setRunning(false);
         }

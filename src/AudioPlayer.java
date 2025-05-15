@@ -5,6 +5,7 @@ public class AudioPlayer
 {
     private Clip clip;
     private int volume = 100;
+    private int pauseFrame = 0;
 
     public AudioPlayer(String s)
     {
@@ -54,6 +55,20 @@ public class AudioPlayer
     public void stop()
     {
         if(clip.isRunning()) clip.stop();
+    }
+
+    public void pause() {
+        if (clip != null && clip.isRunning()) {
+            pauseFrame = clip.getFramePosition();
+            clip.stop();
+        }
+    }
+
+    public void resume() {
+        if (clip != null && !clip.isRunning()) {
+            clip.setFramePosition(pauseFrame);
+            clip.start();
+        }
     }
 
     public void close()

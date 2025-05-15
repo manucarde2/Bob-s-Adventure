@@ -7,9 +7,8 @@ public class TutorialState extends GameState {
     private String[] options = {
             "Press Arrow Right to Move Right",
             "Press Arrow Left to Move Left",
-            "Press Space to Jump",
-            "Press E to Use Ability",
-            "Press Space to Start Level 1"
+            "Press Z to Jump",
+            "Press X to Use Ability"
     };
 
     private Color titleColor;
@@ -89,7 +88,7 @@ public class TutorialState extends GameState {
 
 
     private void select() {
-        gsm.setState(GameStateManager.LEVEL1STATE);
+        gsm.setState(GameStateManager.LEVEL6STATE);
     }
 
     @Override

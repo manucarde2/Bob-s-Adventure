@@ -131,7 +131,7 @@ public class GameStateManager
     {
         try
         {
-            if(gameStates[currentState] != null)
+            if(gameStates[currentState] != null && !gameStates[currentState].pause)
                 gameStates[currentState].update();
         }
         catch (Exception e)
@@ -162,7 +162,8 @@ public class GameStateManager
     {
         try
         {
-            gameStates[currentState].keyReleased(k);
+            if(gameStates[currentState] != null)
+                gameStates[currentState].keyReleased(k);
         }
         catch (Exception e)
         {
