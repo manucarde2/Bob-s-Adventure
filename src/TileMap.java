@@ -154,7 +154,6 @@ public class TileMap
         int c = rc%numTilesAcross;
         if(tiles[r][c].getType() == Tile.ITEM)
         {
-            System.out.println("Item aggiunto " + type);
             Item item = new Item();
             item.row = row;
             item.col = col;
@@ -170,7 +169,6 @@ public class TileMap
         int c = rc%numTilesAcross;
         if(tiles[r][c].getType() == Tile.BREAK)
         {
-            System.out.println("Blocco rotto");
             map[row][col] = 0;
             checkBreakBlock(row, col-1);
             checkBreakBlock(row, col+1);

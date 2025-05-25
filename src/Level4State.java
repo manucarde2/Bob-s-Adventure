@@ -320,10 +320,6 @@ public class Level4State extends GameState
         {
             player.setRunning(true);
         }
-        if(k == KeyEvent.VK_SPACE)
-        {
-            System.out.println("x: " + player.getX() + " y: " + player.getY());
-        }
         if(k == KeyEvent.VK_ESCAPE) {
             pause = !pause;
             if(pause)

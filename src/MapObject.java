@@ -110,7 +110,6 @@ public abstract class MapObject
         if(tl == Tile.ITEM && tr == Tile.ITEM)
         {
             havePowerUp = true;
-            System.out.println(topTile + " " + leftTile);
             tx = (leftTile*32) + 16;
             ty = (topTile*32) - 16;
             savedPowerUp = tileMap.getItem(topTile, leftTile);

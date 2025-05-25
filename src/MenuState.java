@@ -202,9 +202,8 @@ public class MenuState extends GameState implements Serializable
                 GameStateManager.CURRENTLEVEL = GameStateManager.LEVEL1STATE;
                 GameStateManager.musicVolume = 50;
                 GameStateManager.effectVolume = 50;
-                GameStateManager.scale        = 2;
+                GameStateManager.scale = 2;
 
-                System.out.println("File non trovato, creando file con valori predefiniti...");
                 salvataggio(nomeFile);
                 return;
             }
