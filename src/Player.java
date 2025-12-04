@@ -31,7 +31,9 @@ public class Player extends MapObject
     private boolean gliding;
     private boolean flyRight;
     private boolean notGliding;
+    private int doubleJumpCost;
     private boolean cantGliding;
+    private boolean canDoubleJumping;
 
     private boolean running;
     private boolean isFast;
@@ -157,6 +159,7 @@ public class Player extends MapObject
         maxFallSpeed = 4.0;
         jumpStart = -5.8;
         stopJumpSpeed = 0.3;
+        canDoubleJumping = false;
 
         facingRight = true;
 
@@ -173,6 +176,7 @@ public class Player extends MapObject
         dashRange = 16;
         dashCost = 10;
         dashDamage = 5;
+        doubleJumpCost = 500;
 
         changeAbility(PNORMAL);
 
@@ -519,15 +523,16 @@ public class Player extends MapObject
         //caduta
         if(falling)
         {
-            if(dy>0 && gliding)
+            if(dy > 0 && gliding)
             {
-                dy += fallSpeed*0.05;
+                dy += fallSpeed * 0.05;
             }
             else
             {
                 dy += fallSpeed;
             }
 
+            // Aggiorna stato salto
             if(dy > 0)
             {
                 jumping = false;
@@ -540,7 +545,26 @@ public class Player extends MapObject
             {
                 dy = maxFallSpeed;
             }
+
+            // Gestione doppio salto durante il planare
+            if(gliding)
+            {
+                if(up && canDoubleJumping && energy>=doubleJumpCost)
+                {
+                    dy = jumpStart;
+                    jumping = true;
+                    canDoubleJumping = false;
+                    energy -= doubleJumpCost;
+
+                    // Suono salto
+                    sfx.get("jump").setVolume(GameStateManager.effectVolume);
+                    sfx.get("jump").play();
+                }
+            }
         }
+        else
+            canDoubleJumping = true;
+
 
         if(running && !falling && ((energy-dashCost)>=0))
         {

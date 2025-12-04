@@ -145,7 +145,8 @@ public class Level2State extends GameState
         for(int i = 0; i < enemies.size(); i++)
         {
             Enemy e = enemies.get(i);
-            e.update();
+            if (!e.notOnScreen())
+                e.update();
             if(e.bloccoDanno)
             {
                 e.dead = true;
