@@ -5,7 +5,6 @@ import entities.*;
 import states.*;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class Level1State extends GameState
@@ -19,6 +18,7 @@ public class Level1State extends GameState
     private ArrayList<PowerUp> powerUps;
     private HUD hud;
     private AudioPlayer bgMusic;
+    private PlayerControls controls;
 
     public Level1State(GameStateManager gsm)
     {
@@ -50,6 +50,8 @@ public class Level1State extends GameState
         bgMusic = new AudioPlayer("/Music/L_avventura-di-Bob-1.wav");
         bgMusic.setVolume(GameStateManager.musicVolume);
         bgMusic.playLoop();
+
+        controls = new PlayerControls(player,gsm,bgMusic);
 
         tileMap.addItem(19,6, PowerUp.FIRE);
         tileMap.addItem(12,26, PowerUp.CURE);
@@ -305,81 +307,11 @@ public class Level1State extends GameState
     }
     public void keyPressed(int k)
     {
-        if(k == KeyEvent.VK_LEFT)
-        {
-            player.setLeft(true);
-        }
-        if(k == KeyEvent.VK_RIGHT)
-        {
-            player.setRight(true);
-        }
-        if(k == KeyEvent.VK_Z)
-        {
-            player.setUp(true);
-            player.setJumping(true);
-        }
-        if(k == KeyEvent.VK_DOWN)
-        {
-            player.setDown(true);
-        }
-        if(k == KeyEvent.VK_X)
-        {
-            player.setGliding(true);
-        }
-        if(k == KeyEvent.VK_X)
-        {
-            player.setScratching();
-        }
-        if(k == KeyEvent.VK_X)
-        {
-            player.setFiring();
-        }
-        if(k == KeyEvent.VK_X)
-        {
-            player.setRunning(true);
-        }
-        if(k == KeyEvent.VK_ESCAPE) {
-            pause = !pause;
-            if(pause)
-            {
-                bgMusic.pause();
-            }
-
-            else
-                bgMusic.resume();
-        }
-        if(k == KeyEvent.VK_BACK_SPACE && pause)
-        {
-            pause = false;
-            gsm.setState(GameStateManager.MENUSTATE);
-        }
+        controls.keyPressed(k);
+        pause = controls.isPaused();
     }
     public void keyReleased(int k)
     {
-        if(k == KeyEvent.VK_LEFT)
-        {
-            player.setLeft(false);
-        }
-        if(k == KeyEvent.VK_RIGHT)
-        {
-            player.setRight(false);
-        }
-        if(k == KeyEvent.VK_Z)
-        {
-            player.setUp(false);
-            player.setJumping(false);
-        }
-        if(k == KeyEvent.VK_DOWN)
-        {
-            player.setDown(false);
-        }
-        if(k == KeyEvent.VK_X)
-        {
-            player.setGliding(false);
-        }
-        if(k == KeyEvent.VK_X)
-        {
-            player.setRunning(false);
-        }
+        controls.keyReleased(k);
     }
 }
