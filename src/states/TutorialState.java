@@ -94,6 +94,7 @@ public class TutorialState extends GameState {
 
     private void select() {
         gsm.setState(GameStateManager.LEVEL1STATE);
+        GameStateManager.MAXREACHEDLEVEL = GameStateManager.LEVEL1STATE;
     }
 
     @Override

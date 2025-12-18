@@ -10,18 +10,20 @@ public class GameStateManager
     public GamePanel gamePanel;
 
     public static int CURRENTLEVEL;
-    public static final int NUMGAMESTATES = 11;
+    public static int MAXREACHEDLEVEL;
+    public static final int NUMGAMESTATES = 12;
     public static final int MENUSTATE = 0;
     public static final int GAMEOVERSTATE = 1;
     public static final int WINSTATE = 2;
     public static final int SETTINGSSTATE = 3;
     public static final int TUTORIALSTATE = 4;
-    public static final int LEVEL1STATE = 5;
-    public static final int LEVEL2STATE = 6;
-    public static final int LEVEL3STATE = 7;
-    public static final int LEVEL4STATE = 8;
-    public static final int LEVEL5STATE = 9;
-    public static final int LEVEL6STATE = 10;
+    public static final int SELECTLEVELSTATE = 5;
+    public static final int LEVEL1STATE = 6;
+    public static final int LEVEL2STATE = 7;
+    public static final int LEVEL3STATE = 8;
+    public static final int LEVEL4STATE = 9;
+    public static final int LEVEL5STATE = 10;
+    public static final int LEVEL6STATE = 11;
 
     public static int scale;
     public static int musicVolume;
@@ -32,6 +34,7 @@ public class GameStateManager
         this.gamePanel = gamePanel;
         gameStates = new GameState[NUMGAMESTATES];
         CURRENTLEVEL = 0;
+        MAXREACHEDLEVEL = CURRENTLEVEL;
         musicVolume = 50;
         effectVolume = 50;
 
@@ -47,69 +50,76 @@ public class GameStateManager
     private void loadState(int state)
     {
         if(state == MENUSTATE)
-        {
             gameStates[state] = new MenuState(this);
-        }
 
         if(state == SETTINGSSTATE)
-        {
             gameStates[state] = new SettingsState(this);
-        }
 
         if(state == LEVEL1STATE)
         {
             gameStates[state] = new Level1State(this);
             CURRENTLEVEL = LEVEL1STATE;
+            if(CURRENTLEVEL > MAXREACHEDLEVEL) MAXREACHEDLEVEL = CURRENTLEVEL;
         }
 
         if(state == LEVEL2STATE)
         {
             gameStates[state] = new Level2State(this);
             CURRENTLEVEL = LEVEL2STATE;
+            if(CURRENTLEVEL > MAXREACHEDLEVEL) MAXREACHEDLEVEL = CURRENTLEVEL;
         }
 
         if(state == LEVEL3STATE)
         {
             gameStates[state] = new Level3State(this);
             CURRENTLEVEL = LEVEL3STATE;
+            if(CURRENTLEVEL > MAXREACHEDLEVEL) MAXREACHEDLEVEL = CURRENTLEVEL;
         }
 
         if(state == LEVEL4STATE)
         {
             gameStates[state] = new Level4State(this);
             CURRENTLEVEL = LEVEL4STATE;
+            if(CURRENTLEVEL > MAXREACHEDLEVEL) MAXREACHEDLEVEL = CURRENTLEVEL;
         }
 
         if(state == LEVEL5STATE)
         {
             gameStates[state] = new Level5State(this);
             CURRENTLEVEL = LEVEL5STATE;
+            if(CURRENTLEVEL > MAXREACHEDLEVEL) MAXREACHEDLEVEL = CURRENTLEVEL;
         }
 
         if(state == LEVEL6STATE)
         {
             gameStates[state] = new Level6State(this);
             CURRENTLEVEL = LEVEL6STATE;
+            if(CURRENTLEVEL > MAXREACHEDLEVEL) MAXREACHEDLEVEL = CURRENTLEVEL;
         }
 
         if(state == GAMEOVERSTATE)
-        {
             gameStates[state] = new GameOverState(this);
-        }
 
         if(state == WINSTATE)
         {
             gameStates[state] = new WinState(this);
             CURRENTLEVEL = LEVEL1STATE;
+            if(CURRENTLEVEL > MAXREACHEDLEVEL) MAXREACHEDLEVEL = CURRENTLEVEL;
         }
 
         if(state == TUTORIALSTATE)
         {
             gameStates[state] = new TutorialState(this);
             CURRENTLEVEL = LEVEL1STATE;
+            if(CURRENTLEVEL > MAXREACHEDLEVEL) MAXREACHEDLEVEL = CURRENTLEVEL;
         }
 
+        if(state == SELECTLEVELSTATE)
+            gameStates[state] = new SelectLevelState(this);
+
         MenuState.salvataggio("BobFile");
+
+        System.out.println(MAXREACHEDLEVEL);
     }
 
     private void unloadState(int state)
@@ -122,7 +132,6 @@ public class GameStateManager
         unloadState(currentState);
         currentState = state;
         loadState(currentState);
-        //gameStates[currentState].init();
     }
 
     public void resizeScale(int newScale)

@@ -103,7 +103,7 @@ public class MenuState extends GameState implements Serializable
         }
         if(currentChoice == 1)
         {
-            gsm.setState(GameStateManager.CURRENTLEVEL);
+            gsm.setState(GameStateManager.SELECTLEVELSTATE);
             bgMusic.close();
         }
         if(currentChoice == 2)
@@ -170,7 +170,9 @@ public class MenuState extends GameState implements Serializable
             fOUT.writeInt(GameStateManager.musicVolume);
             fOUT.writeInt(GameStateManager.effectVolume);
             fOUT.writeInt(GameStateManager.scale);
+            fOUT.writeInt(GameStateManager.MAXREACHEDLEVEL);
             fOUT.flush();
+            fOUT.close();
             f.close();
         }
         catch (Exception e)
@@ -218,6 +220,12 @@ public class MenuState extends GameState implements Serializable
             GameStateManager.musicVolume = fIN.readInt();
             GameStateManager.effectVolume = fIN.readInt();
             GameStateManager.scale = fIN.readInt();
+            try {
+                GameStateManager.MAXREACHEDLEVEL = fIN.readInt();
+            } catch (EOFException e) {
+                GameStateManager.MAXREACHEDLEVEL = GameStateManager.CURRENTLEVEL;
+            }
+            fIN.close();
             f.close();
         }
         catch (Exception e)
