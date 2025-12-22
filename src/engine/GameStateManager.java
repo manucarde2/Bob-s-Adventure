@@ -111,15 +111,12 @@ public class GameStateManager
         {
             gameStates[state] = new TutorialState(this);
             CURRENTLEVEL = LEVEL1STATE;
-            if(CURRENTLEVEL > MAXREACHEDLEVEL) MAXREACHEDLEVEL = CURRENTLEVEL;
         }
 
         if(state == SELECTLEVELSTATE)
             gameStates[state] = new SelectLevelState(this);
 
         MenuState.salvataggio("BobFile");
-
-        System.out.println(MAXREACHEDLEVEL);
     }
 
     private void unloadState(int state)

@@ -73,7 +73,8 @@ public class SelectLevelState extends GameState {
         // ===== OPZIONI =====
         g.setFont(font);
 
-        int maxLevelReached = GameStateManager.CURRENTLEVEL - GameStateManager.LEVEL1STATE;
+        int maxLevelReached =
+                GameStateManager.MAXREACHEDLEVEL - GameStateManager.LEVEL1STATE;
         int maxWorldReached = maxLevelReached / LEVELS_PER_WORLD;
 
         for (int i = 0; i < options.length; i++) {
@@ -146,8 +147,10 @@ public class SelectLevelState extends GameState {
 
     private void changeValue(int dir) {
 
-        int maxLevelReached = GameStateManager.CURRENTLEVEL - GameStateManager.LEVEL1STATE;
+        int maxLevelReached =
+                GameStateManager.MAXREACHEDLEVEL - GameStateManager.LEVEL1STATE;
         int maxWorldReached = maxLevelReached / LEVELS_PER_WORLD;
+
 
         // ===== WORLD =====
         if (currentChoice == 0) {

@@ -104,6 +104,7 @@ public class MenuState extends GameState implements Serializable
         if(currentChoice == 1)
         {
             gsm.setState(GameStateManager.SELECTLEVELSTATE);
+
             bgMusic.close();
         }
         if(currentChoice == 2)
