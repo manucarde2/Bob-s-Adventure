@@ -85,7 +85,7 @@ public class WinState extends GameState
     {
         if(currentChoice == 0)
         {
-            gsm.setState(GameStateManager.LEVEL1STATE);
+            gsm.setState(GameStateManager.TUTORIALSTATE);
             bgMusic.close();
         }
         if(currentChoice == 1)
