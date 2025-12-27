@@ -618,6 +618,35 @@ public class Player extends MapObject
         checkTileMapCollision();
         setPosition(xtemp, ytemp);
 
+        // --- controllo blocco sopra la testa ---
+        if(dy < 0) {
+            int col = (int)(x / tileSize);
+            int row = (int)((y + dy - cheight / 2) / tileSize);
+            int tileType = tileMap.getType(row, col);
+
+            switch(tileType) {
+                case Tile.BREAK:
+                    // rimuove il blocco Break
+                    tileMap.removeBreakBlock(row, col);
+                    dy = 0;
+                    ytemp = (row + 1) * tileSize + cheight / 2;
+                    break;
+
+                case Tile.ITEM:
+                    // ottiene il tipo di power-up e lo evoca
+                    havePowerUp = true;
+
+                    // salva tipo e posizione
+                    savedPowerUp = tileMap.getItem(row, col);
+                    tx = col * tileSize + tileSize / 2;
+                    ty = row * tileSize - tileSize / 2;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         if(currentAction == SCRATCHING)
         {
             if(animation.hasPlayedOnce())

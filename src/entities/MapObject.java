@@ -108,21 +108,23 @@ public abstract class MapObject
         if(tl == Tile.DANNO || tr == Tile.DANNO || bl == Tile.DANNO || br == Tile.DANNO)
             bloccoDanno = true;
 
-        if(tl == Tile.ENDLEVEL || tr == Tile.ENDLEVEL || bl == Tile.ENDLEVEL || br == Tile.ENDLEVEL)
+        if(this.getClass() == Player.class && (tl == Tile.ENDLEVEL || tr == Tile.ENDLEVEL || bl == Tile.ENDLEVEL || br == Tile.ENDLEVEL))
             fineLivello = true;
 
-        if(tl == Tile.ITEM && tr == Tile.ITEM)
+        // non serve più
+        /*if(tl == Tile.ITEM && tr == Tile.ITEM)
         {
             havePowerUp = true;
             tx = (leftTile*32) + 16;
             ty = (topTile*32) - 16;
             savedPowerUp = tileMap.getItem(topTile, leftTile);
-        }
+        }*/
 
-        if(tl == Tile.BREAK && tr == Tile.BREAK && this.getClass() == Player.class)
+        // non serve più
+        /*if(tl == Tile.BREAK && tr == Tile.BREAK && this.getClass() == Player.class)
         {
             tileMap.removeBreakBlock(topTile, leftTile);
-        }
+        }*/
     }
 
     public void checkTileMapCollision()
