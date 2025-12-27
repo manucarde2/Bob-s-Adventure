@@ -24,6 +24,8 @@ public class Player extends MapObject
     private int fireBallDamage;
     private ArrayList<FireBall> fireBalls;
 
+    private ArrayList<BobPunch> punches;
+    private int scratchCost;
     private boolean scratching;
     private int scratchDamage;
     private int scratchRange;
@@ -174,6 +176,8 @@ public class Player extends MapObject
         fireBallDamage = 5;
         fireBalls = new ArrayList<FireBall>();
 
+        scratchCost = 500;
+        punches = new ArrayList<BobPunch>();
         scratchDamage = 8;
         scratchRange = 48;
 
@@ -358,7 +362,7 @@ public class Player extends MapObject
             Enemy e = enemies.get(i);
 
             //scratch attack
-            if(scratching)
+            /*if(scratching)
             {
                 if(facingRight)
                 {
@@ -382,6 +386,17 @@ public class Player extends MapObject
                     {
                         e.hit(scratchDamage);
                     }
+                }
+            }*/
+
+            // bob punches
+            for(int j = 0; j < punches.size(); j++)
+            {
+                if(punches.get(j).intersects(e))
+                {
+                    e.hit(scratchDamage);
+                    punches.get(j).setHit(); // fa sparire il pugno subito
+                    break; // opzionale, così un pugno colpisce un solo nemico
                 }
             }
 
@@ -638,6 +653,16 @@ public class Player extends MapObject
                 fireBalls.add(fb);
             }
         }
+        if(scratching && currentAction != SCRATCHING)
+        {
+            if(energy > fireCost)
+            {
+                energy -= scratchCost;
+                BobPunch bp = new BobPunch(tileMap, facingRight);
+                bp.setPosition(x, y);
+                punches.add(bp);
+            }
+        }
         if(running)
         {
             if((energy-dashCost)>=0)
@@ -657,6 +682,15 @@ public class Player extends MapObject
             if(fireBalls.get(i).shouldRemove())
             {
                 fireBalls.remove(i);
+                i--;
+            }
+        }
+        for(int i = 0; i < punches.size(); i++)
+        {
+            punches.get(i).update();
+            if(punches.get(i).shouldRemove())
+            {
+                punches.remove(i);
                 i--;
             }
         }
@@ -811,6 +845,10 @@ public class Player extends MapObject
         for(int i = 0; i < fireBalls.size(); i++)
         {
             fireBalls.get(i).draw(g);
+        }
+        for(int i = 0; i < punches.size(); i++)
+        {
+            punches.get(i).draw(g);
         }
 
         //disegno del player
