@@ -356,6 +356,7 @@ public class Player extends MapObject
 
     public void checkAttack(ArrayList<Enemy> enemies)
     {
+        boolean hitTop = false;
         //loop trough enemies
         for (int i = 0; i < enemies.size(); i++)
         {
@@ -441,16 +442,24 @@ public class Player extends MapObject
             //check enemy collision
             if(intersects(e))
             {
-                if(e instanceof Loomby && dy>0 && y != e.y)
+                if(e instanceof Loomby)
                 {
-                    if (!((Loomby)e).isSquashing)
-                        dy = jumpStart * 1;
-                    ((Loomby)e).squash();
+                    boolean fallingOnTop = dy>e.dy && y < e.y && x >= e.x - (double) (e.cwidth + cwidth) /2 && x <= e.x + (double) (e.cwidth + cwidth) /2;
+
+                    if (fallingOnTop && !((Loomby) e).isSquashing)
+                    {
+                        hitTop = true;
+                        ((Loomby) e).squash();
+                    } else if (!((Loomby) e).isSquashing)
+                    {
+                        hit(e.getDamage());
+                    }
                 }
                 else
                 {
                     hit(e.getDamage());
                 }
+
             }
 
             //check void collision
@@ -459,6 +468,9 @@ public class Player extends MapObject
                 dead = true;
             }
         }
+
+        if(hitTop)
+            dy = jumpStart;
     }
 
     public int getSavedPowerUp()
