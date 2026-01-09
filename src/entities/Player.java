@@ -444,7 +444,7 @@ public class Player extends MapObject
             {
                 if(e instanceof Loomby)
                 {
-                    boolean fallingOnTop = dy>e.dy && y < e.y && x >= e.x - (double) (e.cwidth + cwidth) /2 && x <= e.x + (double) (e.cwidth + cwidth) /2;
+                    boolean fallingOnTop = dy>e.dy && y < e.y;
 
                     if (fallingOnTop && !((Loomby) e).isSquashing)
                     {
@@ -481,7 +481,7 @@ public class Player extends MapObject
 
     public void hit(int damage)
     {
-        if(!running)
+        if(!running || energy <= 1)
         {
             changeAbility(PNORMAL);
             if(flinching) return;

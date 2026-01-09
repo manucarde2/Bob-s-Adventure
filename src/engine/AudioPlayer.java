@@ -98,7 +98,13 @@ public class AudioPlayer
 
             float minDb = gainControl.getMinimum();
             float maxDb = gainControl.getMaximum();
-            float db = (maxDb - minDb) * (volumePercent / 100f) + minDb;
+
+            // Percentuale trasformata in scala logaritmica
+            float volume = volumePercent / 100f;
+            float db = (float) (Math.log10(volume == 0 ? 0.0001 : volume) * 20); // logaritmico
+
+            // clamp tra minDb e maxDb
+            db = Math.max(minDb, Math.min(maxDb, db));
 
             gainControl.setValue(db);
         }

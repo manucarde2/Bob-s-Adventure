@@ -5,12 +5,12 @@ import engine.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class SettingsState extends GameState
-{
+public class SettingsState extends GameState {
+
     private Background bg;
 
     private int currentChoice = 0;
-    private String[] options = {
+    private final String[] options = {
             "Music",
             "Sound Effects",
             "Screen Scale",
@@ -19,29 +19,19 @@ public class SettingsState extends GameState
 
     private int screenScale;
 
-    private Color titleColor;
-    private Font titleFont;
-    private Font font;
+    private final Font titleFont = new Font("Century Gothic", Font.PLAIN, 28);
+    private final Font font = new Font("Arial", Font.PLAIN, 12);
 
-    // Offset verticale per abbassare le voci
     private final int verticalOffset = 30;
 
-    public SettingsState(GameStateManager gsm)
-    {
+    public SettingsState(GameStateManager gsm) {
         this.gsm = gsm;
 
-        try
-        {
+        try {
             bg = new Background("/Backgrounds/Sfondo Bob GameOver.png", 1);
             bg.setVector(-0.1, 0, 0, 0);
-            titleColor = new Color(255, 0, 0);
-            titleFont = new Font("Century Gothic", Font.PLAIN, 28);
-
-            font = new Font("Arial", Font.PLAIN, 12);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
+        } catch (Exception e) {
+            bg = null;
         }
 
         screenScale = GameStateManager.scale;
@@ -54,151 +44,119 @@ public class SettingsState extends GameState
     }
 
     @Override
-    public void update()
-    {
-        bg.update();
+    public void update() {
+        if (bg != null) bg.update();
+    }
+
+    // calcola il massimo scale per l’altezza dello schermo
+    private int computeMaxScale() {
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        return screen.height / GamePanel.HEIGHT;
     }
 
     @Override
-    public void draw(Graphics2D g)
-    {
-        // Disegna il background
-        bg.draw(g);
+    public void draw(Graphics2D g) {
+        if (bg != null) bg.draw(g);
 
-        // Disegna il titolo
-        g.setColor(titleColor);
         g.setFont(titleFont);
-        g.drawString("SETTINGS", 40, 50);  // Posizione del titolo (resta invariata)
+        g.setColor(Color.RED);
+        g.drawString("SETTINGS", 40, 100 - 30);
 
-        // Disegna le opzioni del menu, abbassate
         g.setFont(font);
-        for(int i = 0; i < options.length; i++)
-        {
-            if(i == currentChoice)
-            {
-                g.setColor(Color.YELLOW);
-            }
-            else
-            {
-                g.setColor(Color.white);
-            }
-            g.drawString(options[i], 50, 100 + i * 30 + verticalOffset); // Abbassiamo tutto con l'offset
+        for (int i = 0; i < options.length; i++) {
+            g.setColor(i == currentChoice ? Color.YELLOW : Color.WHITE);
+            g.drawString(options[i], 50, 100 + i * 30 + verticalOffset);
         }
 
-        // Calcolare la posizione orizzontale centrata per le barre, ma spostata a destra
-        int barWidth = 100;  // Larghezza della barra
-        int barX = 180;  // Posizione a destra rispetto alla colonna delle opzioni
+        // barre volume
+        int barX = 180;
+        int musicY = 90 + verticalOffset;
+        int effectsY = 130 + verticalOffset;
+        int scaleY = 170 + verticalOffset;
+        int barWidth = 100;
+        int barHeight = 10;
 
-        // Posizione verticale delle barre, abbassata con offset
-        int volumeY = 90 + verticalOffset;  // Posizione verticale della barra volume
-        int volumeSY = 130 + verticalOffset;  // Posizione verticale della barra volume
-        int scaleY = 170 + verticalOffset;  // Posizione verticale della barra screen scale
+        // Music
+        g.setColor(new Color(80, 80, 80));
+        g.fillRect(barX, musicY, barWidth, barHeight);
+        g.setColor(Color.BLUE);
+        g.fillRect(barX, musicY, GameStateManager.musicVolume * barWidth / 100, barHeight);
+        g.setColor(Color.WHITE);
+        g.drawRect(barX, musicY, barWidth, barHeight);
 
-        // Disegna il volume con la barra
-        g.setColor(Color.white);
-        g.drawString("Music: " + GameStateManager.musicVolume, barX, volumeY - 10);  // Etichetta volume sopra la barra
-        g.drawRect(barX, volumeY, barWidth, 10);  // Barra volume
-        g.setColor(Color.blue);
-        g.fillRect(barX, volumeY, GameStateManager.musicVolume, 10); // Riempie la barra in base al volume
+        // Effects
+        g.setColor(new Color(80, 80, 80));
+        g.fillRect(barX, effectsY, barWidth, barHeight);
+        g.setColor(Color.BLUE);
+        g.fillRect(barX, effectsY, GameStateManager.effectVolume * barWidth / 100, barHeight);
+        g.setColor(Color.WHITE);
+        g.drawRect(barX, effectsY, barWidth, barHeight);
 
-        g.setColor(Color.white);
-        g.drawString("Sound Effects: " + GameStateManager.effectVolume, barX, volumeSY - 10);
-        g.drawRect(barX, volumeSY, barWidth, 10);  // Barra volume
-        g.setColor(Color.blue);
-        g.fillRect(barX, volumeSY, GameStateManager.effectVolume, 10);
+        // Screen Scale (barra proporzionale)
+        int maxScale = computeMaxScale();
+        String scaleText = (screenScale == -1) ? "FULL" : String.valueOf(screenScale);
 
-        // Disegna la scala dello schermo con il valore
-        g.setColor(Color.white);
-        g.drawString("Screen Scale: " + screenScale, barX, scaleY - 10);  // Etichetta scala sopra la barra
-        g.drawRect(barX, scaleY, barWidth, 10);  // Barra scale
-        g.setColor(Color.green);
-        g.fillRect(barX, scaleY, screenScale * 20, 10); // Riempie la barra in base alla scala
-    }
+        g.setColor(Color.WHITE);
+        g.drawString("Screen Scale: " + scaleText, barX, scaleY - 10);
+        g.drawRect(barX, scaleY, barWidth, barHeight);
 
-    private void select()
-    {
-        if(currentChoice == 0)
-        {
-            // Si può regolare il volume usando la barra (sinistra/destra)
+        // calcola percentuale barra verde
+        double percent;
+        if (screenScale == -1) {
+            percent = 1.0; // FULLSCREEN → barra piena
+        } else {
+            percent = screenScale / (double) maxScale;
         }
-        if(currentChoice == 1)
-        {
-            // Si può regolare il volume degli effetti usando la barra (sinistra/destra)
-        }
-        if(currentChoice == 2)
-        {
-            // Si può regolare la scala dello schermo
-        }
-        if(currentChoice == 3)
-        {
-            gsm.setState(GameStateManager.MENUSTATE);  // Torna al menu
-        }
+
+        int fillWidth = (int) (barWidth * percent);
+        g.setColor(Color.GREEN);
+        g.fillRect(barX, scaleY, fillWidth, barHeight);
     }
 
     @Override
-    public void keyPressed(int k)
-    {
-        if(k == KeyEvent.VK_ENTER)
-        {
-            select();
-        }
-        if(k == KeyEvent.VK_UP)
-        {
-            currentChoice--;
-            if(currentChoice == -1)
-            {
-                currentChoice = options.length - 1;
-            }
-        }
-        if(k == KeyEvent.VK_DOWN)
-        {
-            currentChoice++;
-            if(currentChoice == options.length)
-            {
-                currentChoice = 0;
-            }
-        }
+    public void keyPressed(int k) {
+        int maxScale = computeMaxScale();
 
-        // Aggiungere la logica per modificare il volume
-        if(k == KeyEvent.VK_LEFT)
-        {
-            if(currentChoice == 0 && GameStateManager.musicVolume > 0)  // Volume
-            {
+        if (k == KeyEvent.VK_UP)
+            currentChoice = (currentChoice - 1 + options.length) % options.length;
+
+        if (k == KeyEvent.VK_DOWN)
+            currentChoice = (currentChoice + 1) % options.length;
+
+        // modifiche volume / scale
+        if (currentChoice == 0) {
+            if (k == KeyEvent.VK_LEFT && GameStateManager.musicVolume > 0)
                 GameStateManager.musicVolume--;
-            }
-            if(currentChoice == 1 && GameStateManager.effectVolume > 0)  // Screen scale
-            {
-                GameStateManager.effectVolume--;
-            }
-            if(currentChoice == 2 && screenScale > 1)  // Screen scale
-            {
-                screenScale--;
-            }
-        }
-
-        if(k == KeyEvent.VK_RIGHT)
-        {
-            if(currentChoice == 0 && GameStateManager.musicVolume < 100)  // Volume
-            {
+            if (k == KeyEvent.VK_RIGHT && GameStateManager.musicVolume < 100)
                 GameStateManager.musicVolume++;
-            }
-            if(currentChoice == 1 && GameStateManager.effectVolume < 100)  // Screen scale
-            {
+        } else if (currentChoice == 1) {
+            if (k == KeyEvent.VK_LEFT && GameStateManager.effectVolume > 0)
+                GameStateManager.effectVolume--;
+            if (k == KeyEvent.VK_RIGHT && GameStateManager.effectVolume < 100)
                 GameStateManager.effectVolume++;
+        } else if (currentChoice == 2) {
+            if (k == KeyEvent.VK_RIGHT) {
+                if (screenScale == -1) screenScale = 1;
+                else screenScale++;
+                if (screenScale > maxScale) screenScale = -1; // FULLSCREEN
             }
-            if(currentChoice == 2 && screenScale < 5)  // Screen scale
-            {
-                screenScale++;
+            if (k == KeyEvent.VK_LEFT) {
+                if (screenScale == -1) screenScale = maxScale;
+                else if (screenScale > 1) screenScale--;
             }
         }
 
-        if(screenScale != GameStateManager.scale)
+        // RETURN
+        if (currentChoice == 3 && k == KeyEvent.VK_ENTER)
+            gsm.setState(GameStateManager.MENUSTATE);
+
+        // aggiorna scala effettiva
+        if (screenScale != GamePanel.SCALE) {
+            GamePanel.SCALE = screenScale;
             gsm.resizeScale(screenScale);
+        }
     }
 
     @Override
-    public void keyReleased(int k)
-    {
-
-    }
+    public void keyReleased(int k) {}
 }
