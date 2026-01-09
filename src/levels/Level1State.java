@@ -150,8 +150,7 @@ public class Level1State extends GameState
         for(int i = 0; i < enemies.size(); i++)
         {
             Enemy e = enemies.get(i);
-            if (!(e instanceof Dodondo) || !e.notOnScreen())
-                e.update();
+            e.update();
             if(e.isBloccoDanno())
             {
                 e.setDead(true);
