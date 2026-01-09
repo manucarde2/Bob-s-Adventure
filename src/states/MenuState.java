@@ -92,6 +92,16 @@ public class MenuState extends GameState implements Serializable
             }
             g.drawString(options[i], 145, 140 + i * 15);
         }
+
+        // --- versione v1.1 in basso a sinistra ---
+        g.setColor(new Color(50, 50, 50));
+        g.setFont(nomeFont);
+
+        String version = "v1.1";
+        int x = 290;
+        int y = 230;
+
+        g.drawString(version, x, y);
     }
 
     private void select()
