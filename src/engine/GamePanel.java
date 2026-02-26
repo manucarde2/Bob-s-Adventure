@@ -11,13 +11,14 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public static final int WIDTH = 320;
     public static final int HEIGHT = 240;
 
-    // scala condivisa con GameStateManager
-    public static int SCALE = 2; // valori >0 = scale intero, -1 = fullscreen
+    // >0 = scala fissa, -1 = fullscreen
+    public static int SCALE = 2;
 
     private Thread thread;
     private boolean running;
-    private final int FPS = 60;
-    private final long targetTime = 1000 / FPS;
+
+    private static final int FPS = 60;
+    private static final long TARGET_TIME = 1000 / FPS;
 
     private BufferedImage image;
     private Graphics2D g;
@@ -26,16 +27,15 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
     public GamePanel() {
         setFocusable(true);
-        requestFocus();
-        setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+        setBackground(Color.BLACK);
     }
 
     @Override
     public void addNotify() {
         super.addNotify();
         if (thread == null) {
-            thread = new Thread(this);
             addKeyListener(this);
+            thread = new Thread(this, "GameThread");
             thread.start();
         }
     }
@@ -43,8 +43,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     private void init() {
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         g = image.createGraphics();
-        running = true;
         gsm = new GameStateManager(this);
+        running = true;
     }
 
     @Override
@@ -56,63 +56,37 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
             gsm.update();
             gsm.draw(g);
-            drawToScreen();
+            repaint();
 
-            long elapsed = System.nanoTime() - start;
-            long wait = Math.max(0, targetTime - elapsed / 1_000_000);
+            long elapsed = (System.nanoTime() - start) / 1_000_000;
+            long wait = TARGET_TIME - elapsed;
+            if (wait < 1) wait = 1;
 
             try {
                 Thread.sleep(wait);
-            } catch (Exception ignored) {}
+            } catch (InterruptedException ignored) {}
         }
     }
 
-    // ridimensiona la finestra con FULLSCREEN reale
-    public void resize() {
-        Window window = SwingUtilities.getWindowAncestor(this);
-        if (!(window instanceof JFrame frame)) return;
-
-        if (SCALE == -1) { // FULLSCREEN
-            frame.dispose();                   // serve per cambiare decorazione
-            frame.setUndecorated(true);       // togli bordi e barra
-            frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // massimizza
-            frame.setVisible(true);
-        } else {
-            // scala intera normale
-            frame.dispose();
-            frame.setUndecorated(false);
-            setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        }
-
-        revalidate();
-        repaint();
-    }
-
-    private void drawToScreen() {
-        Graphics g2 = getGraphics();
-        if (g2 == null) return;
+    // ===== RENDERING CORRETTO =====
+    @Override
+    protected void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
+        Graphics2D g2 = (Graphics2D) graphics;
 
         int panelW = getWidth();
         int panelH = getHeight();
 
-        int drawW;
-        int drawH;
+        int drawW, drawH;
 
         if (SCALE > 0) {
             drawW = WIDTH * SCALE;
             drawH = HEIGHT * SCALE;
         } else {
-            // FULLSCREEN adattivo su qualsiasi schermo
-            Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-            double scaleX = screen.width / (double) WIDTH;
-            double scaleY = screen.height / (double) HEIGHT;
-
-            // mantieni aspect ratio, prendi il più piccolo
-            double scale = Math.min(scaleX, scaleY);
-
+            double scale = Math.min(
+                    panelW / (double) WIDTH,
+                    panelH / (double) HEIGHT
+            );
             drawW = (int) (WIDTH * scale);
             drawH = (int) (HEIGHT * scale);
         }
@@ -120,22 +94,49 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         int x = (panelW - drawW) / 2;
         int y = (panelH - drawH) / 2;
 
-        // sfondo nero per bande
         g2.setColor(Color.BLACK);
         g2.fillRect(0, 0, panelW, panelH);
-
-        // disegna gioco centrato
         g2.drawImage(image, x, y, drawW, drawH, null);
-        g2.dispose();
     }
 
+    // ===== FULLSCREEN VERO =====
+    public void resize() {
+        Window w = SwingUtilities.getWindowAncestor(this);
+        if (!(w instanceof JFrame frame)) return;
+
+        GraphicsDevice gd = GraphicsEnvironment
+                .getLocalGraphicsEnvironment()
+                .getDefaultScreenDevice();
+
+        frame.dispose();
+        frame.setIgnoreRepaint(true);
+
+        if (SCALE == -1) {
+            frame.setUndecorated(true);
+            gd.setFullScreenWindow(frame);
+        } else {
+            gd.setFullScreenWindow(null);
+            frame.setUndecorated(false);
+            setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+        }
+
+        frame.setVisible(true);
+        requestFocusInWindow();
+    }
+
+    // ===== INPUT =====
     @Override
     public void keyPressed(KeyEvent e) {
         gsm.keyPressed(e.getKeyCode());
     }
 
-    @Override public void keyReleased(KeyEvent e) {
+    @Override
+    public void keyReleased(KeyEvent e) {
         gsm.keyReleased(e.getKeyCode());
     }
-    @Override public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
 }
